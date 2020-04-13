@@ -26,12 +26,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/blang/semver"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog"
 	"k8s.io/kops/pkg/apis/kops"
-	"k8s.io/kops/pkg/apis/kops/util"
 	"k8s.io/kops/pkg/featureflag"
+	"k8s.io/kops/pkg/k8sversion"
 	"k8s.io/kops/pkg/kubemanifest"
 	"k8s.io/kops/pkg/values"
 	"k8s.io/kops/util/pkg/hashing"
@@ -51,7 +50,7 @@ type AssetBuilder struct {
 	Phase string
 
 	// KubernetesVersion is the version of kubernetes we are installing
-	KubernetesVersion semver.Version
+	KubernetesVersion k8sversion.KubernetesVersion
 }
 
 // ContainerAsset models a container's location.
@@ -80,7 +79,7 @@ func NewAssetBuilder(cluster *kops.Cluster, phase string) *AssetBuilder {
 		Phase:          phase,
 	}
 
-	version, err := util.ParseKubernetesVersion(cluster.Spec.KubernetesVersion)
+	version, err := k8sversion.Parse(cluster.Spec.KubernetesVersion)
 	if err != nil {
 		// This should have already been validated
 		klog.Fatalf("unexpected error from ParseKubernetesVersion %s: %v", cluster.Spec.KubernetesVersion, err)
@@ -138,7 +137,7 @@ func (a *AssetBuilder) RemapImage(image string) (string, error) {
 	// For versions prior to 1.10, remap k8s.gcr.io to the old name.
 	// This also means that we won't start using the aliased names on existing clusters,
 	// which could otherwise be surprising to users.
-	if !util.IsKubernetesGTE("1.10", a.KubernetesVersion) && strings.HasPrefix(image, "k8s.gcr.io/") {
+	if !a.KubernetesVersion.IsGTE("1.10") && strings.HasPrefix(image, "k8s.gcr.io/") {
 		image = "gcr.io/google_containers/" + strings.TrimPrefix(image, "k8s.gcr.io/")
 	}
 
@@ -189,7 +188,7 @@ func (a *AssetBuilder) RemapImage(image string) (string, error) {
 		normalized := image
 
 		// Remove the 'standard' kubernetes image prefix, just for sanity
-		if !util.IsKubernetesGTE("1.10", a.KubernetesVersion) && strings.HasPrefix(normalized, "gcr.io/google_containers/") {
+		if !a.KubernetesVersion.IsGTE("1.10") && strings.HasPrefix(normalized, "gcr.io/google_containers/") {
 			normalized = strings.TrimPrefix(normalized, "gcr.io/google_containers/")
 		} else {
 			normalized = strings.TrimPrefix(normalized, "k8s.gcr.io/")

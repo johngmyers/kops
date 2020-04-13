@@ -25,8 +25,8 @@ import (
 	"k8s.io/klog"
 	"k8s.io/kops/nodeup/pkg/distros"
 	"k8s.io/kops/pkg/apis/kops"
-	"k8s.io/kops/pkg/apis/kops/util"
 	"k8s.io/kops/pkg/apis/nodeup"
+	"k8s.io/kops/pkg/k8sversion"
 	"k8s.io/kops/pkg/kubeconfig"
 	"k8s.io/kops/pkg/systemd"
 	"k8s.io/kops/upup/pkg/fi"
@@ -37,7 +37,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/blang/semver"
 )
 
 // NodeupModelContext is the context supplied the nodeup tasks
@@ -54,12 +53,12 @@ type NodeupModelContext struct {
 	// IsMaster is true if the InstanceGroup has a role of master (populated by Init)
 	IsMaster bool
 
-	kubernetesVersion semver.Version
+	kubernetesVersion k8sversion.KubernetesVersion
 }
 
 // Init completes initialization of the object, for example pre-parsing the kubernetes version
 func (c *NodeupModelContext) Init() error {
-	k8sVersion, err := util.ParseKubernetesVersion(c.Cluster.Spec.KubernetesVersion)
+	k8sVersion, err := k8sversion.Parse(c.Cluster.Spec.KubernetesVersion)
 	if err != nil || k8sVersion == nil {
 		return fmt.Errorf("unable to parse KubernetesVersion %q", c.Cluster.Spec.KubernetesVersion)
 	}
@@ -278,15 +277,15 @@ func (c *NodeupModelContext) BuildKubeConfig(username string, ca, certificate, p
 
 // IsKubernetesGTE checks if the version is greater-than-or-equal
 func (c *NodeupModelContext) IsKubernetesGTE(version string) bool {
-	if c.kubernetesVersion.Major == 0 {
+	if c.kubernetesVersion.IsZero() {
 		klog.Fatalf("kubernetesVersion not set (%s); Init not called", c.kubernetesVersion)
 	}
-	return util.IsKubernetesGTE(version, c.kubernetesVersion)
+	return c.kubernetesVersion.IsGTE(version)
 }
 
 // IsKubernetesLT checks if the version is less-than
 func (c *NodeupModelContext) IsKubernetesLT(version string) bool {
-	if c.kubernetesVersion.Major == 0 {
+	if c.kubernetesVersion.IsZero() {
 		klog.Fatalf("kubernetesVersion not set (%s); Init not called", c.kubernetesVersion)
 	}
 	return !c.IsKubernetesGTE(version)

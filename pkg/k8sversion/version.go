@@ -44,6 +44,11 @@ func (k *KubernetesVersion) IsGTE(version string) bool {
 	return util.IsKubernetesGTE(version, k.semver)
 }
 
+// IsZero returns true if the version has not been set
+func (k *KubernetesVersion) IsZero() bool {
+	return k.semver.Major == 0
+}
+
 // String returns a string representation of the semver, like 1.10.1.  It does not include a leading 'v'
 func (k *KubernetesVersion) String() string {
 	return k.semver.String()
