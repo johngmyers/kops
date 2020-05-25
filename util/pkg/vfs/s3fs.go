@@ -29,6 +29,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"k8s.io/klog"
 	"k8s.io/kops/util/pkg/hashing"
 )
@@ -119,15 +120,16 @@ func (p *S3Path) Join(relativePath ...string) Path {
 	}
 }
 
-func (p *S3Path) WriteFile(data io.ReadSeeker, aclObj ACL) error {
+func (p *S3Path) WriteFile(data io.Reader, aclObj ACL) error {
 	client, err := p.client()
 	if err != nil {
 		return err
 	}
 
+	uploader := s3manager.NewUploaderWithClient(client)
 	klog.V(4).Infof("Writing file %q", p)
 
-	request := &s3.PutObjectInput{}
+	request := &s3manager.UploadInput{}
 	request.Body = data
 	request.Bucket = aws.String(p.bucket)
 	request.Key = aws.String(p.key)
@@ -161,11 +163,9 @@ func (p *S3Path) WriteFile(data io.ReadSeeker, aclObj ACL) error {
 		request.ACL = s3Acl.RequestACL
 	}
 
-	// We don't need Content-MD5: https://github.com/aws/aws-sdk-go/issues/208
+	klog.V(8).Infof("Calling S3 Upload Bucket=%q Key=%q SSE=%q ACL=%q", p.bucket, p.key, sseLog, acl)
 
-	klog.V(8).Infof("Calling S3 PutObject Bucket=%q Key=%q SSE=%q ACL=%q", p.bucket, p.key, sseLog, acl)
-
-	_, err = client.PutObject(request)
+	_, err = uploader.Upload(request)
 	if err != nil {
 		if acl != "" {
 			return fmt.Errorf("error writing %s (with ACL=%q): %v", p, acl, err)
@@ -182,7 +182,7 @@ func (p *S3Path) WriteFile(data io.ReadSeeker, aclObj ACL) error {
 // TODO: should we enable versioning?
 var createFileLockS3 sync.Mutex
 
-func (p *S3Path) CreateFile(data io.ReadSeeker, acl ACL) error {
+func (p *S3Path) CreateFile(data io.Reader, acl ACL) error {
 	createFileLockS3.Lock()
 	defer createFileLockS3.Unlock()
 

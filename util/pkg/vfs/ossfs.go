@@ -128,7 +128,12 @@ func (p *OSSPath) ReadFile() ([]byte, error) {
 	}
 }
 
-func (p *OSSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
+func (p *OSSPath) WriteFile(data io.Reader, acl ACL) error {
+	bytes, err := ioutil.ReadAll(data)
+	if err != nil {
+		return fmt.Errorf("error reading from data stream: %v", err)
+	}
+
 	b := p.client.Bucket(p.bucket)
 
 	done, err := RetryWithBackoff(ossWriteBackoff, func() (bool, error) {
@@ -144,15 +149,6 @@ func (p *OSSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
 		} else {
 			// Private currently is the default ACL
 			perm = oss.Private
-		}
-
-		if _, err := data.Seek(0, 0); err != nil {
-			return false, fmt.Errorf("error seeking to start of data stream for write to %s: %v", p, err)
-		}
-
-		bytes, err := ioutil.ReadAll(data)
-		if err != nil {
-			return false, fmt.Errorf("error reading from data stream: %v", err)
 		}
 
 		contType := "application/octet-stream"
@@ -178,7 +174,7 @@ func (p *OSSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
 // TODO: should we enable versioning?
 var createFileLockOSS sync.Mutex
 
-func (p *OSSPath) CreateFile(data io.ReadSeeker, acl ACL) error {
+func (p *OSSPath) CreateFile(data io.Reader, acl ACL) error {
 	createFileLockOSS.Lock()
 	defer createFileLockOSS.Unlock()
 

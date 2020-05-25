@@ -22,6 +22,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -143,8 +144,17 @@ func (p *GSPath) Join(relativePath ...string) Path {
 	}
 }
 
-func (p *GSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
-	md5Hash, err := hashing.HashAlgorithmMD5.Hash(data)
+func (p *GSPath) WriteFile(data io.Reader, acl ACL) error {
+	seekableData, ok := data.(io.ReadSeeker)
+	if !ok {
+		dataBytes, err := ioutil.ReadAll(data)
+		if err != nil {
+			return fmt.Errorf("error reading from data stream: %v", err)
+		}
+		seekableData = bytes.NewReader(dataBytes)
+	}
+
+	md5Hash, err := hashing.HashAlgorithmMD5.Hash(seekableData)
 	if err != nil {
 		return err
 	}
@@ -166,11 +176,11 @@ func (p *GSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
 			klog.V(4).Infof("Writing file %q", p)
 		}
 
-		if _, err := data.Seek(0, 0); err != nil {
+		if _, err := seekableData.Seek(0, 0); err != nil {
 			return false, fmt.Errorf("error seeking to start of data stream for write to %s: %v", p, err)
 		}
 
-		_, err = p.client.Objects.Insert(p.bucket, obj).Media(data).Do()
+		_, err = p.client.Objects.Insert(p.bucket, obj).Media(seekableData).Do()
 		if err != nil {
 			return false, fmt.Errorf("error writing %s: %v", p, err)
 		}
@@ -193,7 +203,7 @@ func (p *GSPath) WriteFile(data io.ReadSeeker, acl ACL) error {
 // TODO: should we enable versioning?
 var createFileLockGCS sync.Mutex
 
-func (p *GSPath) CreateFile(data io.ReadSeeker, acl ACL) error {
+func (p *GSPath) CreateFile(data io.Reader, acl ACL) error {
 	createFileLockGCS.Lock()
 	defer createFileLockGCS.Unlock()
 

@@ -94,7 +94,7 @@ func (p *MemFSPath) Join(relativePath ...string) Path {
 	return current
 }
 
-func (p *MemFSPath) WriteFile(r io.ReadSeeker, acl ACL) error {
+func (p *MemFSPath) WriteFile(r io.Reader, acl ACL) error {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
 		return fmt.Errorf("error reading data: %v", err)
@@ -103,7 +103,7 @@ func (p *MemFSPath) WriteFile(r io.ReadSeeker, acl ACL) error {
 	return nil
 }
 
-func (p *MemFSPath) CreateFile(data io.ReadSeeker, acl ACL) error {
+func (p *MemFSPath) CreateFile(data io.Reader, acl ACL) error {
 	// Check if exists
 	if p.contents != nil {
 		return os.ErrExist
