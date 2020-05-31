@@ -91,6 +91,11 @@ func SignNewCertificate(privateKey *PrivateKey, template *x509.Certificate, sign
 	}
 	//c.SignatureAlgorithm  = do we want to override?
 
+	if rsakey, ok := signerPrivateKey.Key.(*rsa.PrivateKey); ok && rsakey.Size() < 55 {
+		// For tests, which use really small keys
+		template.SignatureAlgorithm = x509.MD5WithRSA
+	}
+
 	certificateData, err := x509.CreateCertificate(crypto_rand.Reader, template, parent, template.PublicKey, signerPrivateKey.Key)
 	if err != nil {
 		return nil, fmt.Errorf("error creating certificate: %v", err)

@@ -67,7 +67,7 @@ func NewIntegrationTestHarness(t *testing.T) *IntegrationTestHarness {
 
 	// Generate much smaller keys, as this is often the bottleneck for tests
 	h.originalPKIDefaultPrivateKeySize = pki.DefaultPrivateKeySize
-	pki.DefaultPrivateKeySize = 512
+	pki.DefaultPrivateKeySize = 384
 
 	// Replace the default channel path with a local filesystem path, so we don't try to retrieve it from a server
 	{
