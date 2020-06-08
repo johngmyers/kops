@@ -25,6 +25,7 @@ import (
 )
 
 type Task interface {
+	HasName
 	Run(*Context) error
 }
 
@@ -112,12 +113,7 @@ func (c *ModelBuilderContext) setLifecycleOverride(task Task) Task {
 }
 
 func buildTaskKey(task Task) string {
-	hasName, ok := task.(HasName)
-	if !ok {
-		klog.Fatalf("task %T does not implement HasName", task)
-	}
-
-	name := StringValue(hasName.GetName())
+	name := StringValue(task.GetName())
 	if name == "" {
 		klog.Fatalf("task %T (%v) did not have a Name", task, task)
 	}
