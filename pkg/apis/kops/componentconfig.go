@@ -217,6 +217,11 @@ type KubeletConfigSpec struct {
 	ContainerLogMaxFiles *int32 `json:"containerLogMaxFiles,omitempty" flag:"container-log-max-files"`
 	// EnableCadvisorJsonEndpoints enables cAdvisor json `/spec` and `/stats/*` endpoints. Defaults to False.
 	EnableCadvisorJsonEndpoints *bool `json:"enableCadvisorJsonEndpoints,omitempty" flag:"enable-cadvisor-json-endpoints"`
+	// ShutdownGracePeriod specifies the total duration that the node should delay the shutdown and total grace period for pod termination during a node shutdown.
+	ShutdownGracePeriod *metav1.Duration `json:"shutdownGracePeriod,omitempty" flag:"shutdown-grace-period"`
+	// ShutdownGracePeriodCriticalPods specifies the duration used to terminate critical pods during a node shutdown. This should be less than ShutdownGracePeriod.
+	// For example, if ShutdownGracePeriod=30s, and ShutdownGracePeriodCriticalPods=10s, during a node shutdown the first 20 seconds would be reserved for gracefully terminating normal pods, and the last 10 seconds would be reserved for terminating critical pods.
+	ShutdownGracePeriodCriticalPods *metav1.Duration `json:"shutdownGracePeriodCriticalPods,omitempty" flag:"shutdown-grace-period-critical-pods"`
 }
 
 // KubeProxyConfig defines the configuration for a proxy
