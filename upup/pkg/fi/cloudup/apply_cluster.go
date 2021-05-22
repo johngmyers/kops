@@ -803,9 +803,9 @@ func (c *ApplyClusterCmd) Run(ctx context.Context) error {
 		}
 	}
 
-	err = target.Finish(c.TaskMap) //This will finish the apply, and print the changes
+	err = context.RunTasks(options)
 	if err != nil {
-		return fmt.Errorf("error closing target: %v", err)
+		return fmt.Errorf("error running tasks: %v", err)
 	}
 
 	return nil
