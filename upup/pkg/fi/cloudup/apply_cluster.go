@@ -1293,7 +1293,7 @@ func newNodeUpConfigBuilder(cluster *kops.Cluster, assetBuilder *assets.AssetBui
 }
 
 // BuildConfig returns the NodeUp config and auxiliary config.
-func (n *nodeUpConfigBuilder) BuildConfig(ig *kops.InstanceGroup, apiserverAdditionalIPs []string, caResource fi.Resource) (*nodeup.Config, *nodeup.AuxConfig, error) {
+func (n *nodeUpConfigBuilder) BuildConfig(ig *kops.InstanceGroup, apiserverAdditionalIPs []string, caCertificates fi.Resource) (*nodeup.Config, *nodeup.AuxConfig, error) {
 	cluster := n.cluster
 
 	if ig == nil {
@@ -1341,16 +1341,16 @@ func (n *nodeUpConfigBuilder) BuildConfig(ig *kops.InstanceGroup, apiserverAddit
 			Path:   "/",
 		}
 
-		ca, err := fi.ResourceAsString(caResource)
+		cas, err := fi.ResourceAsString(caCertificates)
 		if err != nil {
 			// CA task may not have run yet; we'll retry
-			return nil, nil, fmt.Errorf("failed to read CA certificate: %w", err)
+			return nil, nil, fmt.Errorf("failed to read CA certificates: %w", err)
 		}
 
 		configServer := &nodeup.ConfigServerOptions{
 			Server:        baseURL.String(),
 			CloudProvider: cluster.Spec.CloudProvider,
-			CA:            ca,
+			CAs:           cas,
 		}
 
 		config.ConfigServer = configServer

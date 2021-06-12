@@ -697,8 +697,8 @@ func getNodeConfigFromServer(ctx context.Context, config *nodeup.ConfigServerOpt
 		Authenticator: authenticator,
 	}
 
-	if config.CA != "" {
-		client.CA = []byte(config.CA)
+	if config.CAs != "" {
+		client.CAs = []byte(config.CAs)
 	}
 
 	u, err := url.Parse(config.Server)

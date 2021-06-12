@@ -86,8 +86,8 @@ type AuxConfig struct {
 type ConfigServerOptions struct {
 	// Server is the address of the configuration server to use (kops-controller)
 	Server string `json:"server,omitempty"`
-	// CA is the ca-certificate to require for the configuration server
-	CA string `json:"ca,omitempty"`
+	// CAs are the CA certificates to trust for the configuration server.
+	CAs string `json:"ca,omitempty"`
 
 	// CloudProvider is the cloud provider in use (needed for authentication)
 	CloudProvider string `json:"cloudProvider,omitempty"`

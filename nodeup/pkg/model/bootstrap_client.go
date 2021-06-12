@@ -55,6 +55,7 @@ func (b BootstrapClientBuilder) Build(c *fi.ModelBuilderContext) error {
 		return err
 	}
 
+	// TODO: support multiple certificates
 	cert, err := b.GetCert(fi.CertificateIDCA)
 	if err != nil {
 		return err
@@ -68,7 +69,7 @@ func (b BootstrapClientBuilder) Build(c *fi.ModelBuilderContext) error {
 
 	bootstrapClient := &nodetasks.KopsBootstrapClient{
 		Authenticator: authenticator,
-		CA:            cert,
+		CAs:           cert,
 		BaseURL:       baseURL,
 	}
 
