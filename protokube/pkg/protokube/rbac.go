@@ -21,7 +21,7 @@ import (
 	"fmt"
 
 	v1 "k8s.io/api/core/v1"
-	rbac "k8s.io/api/rbac/v1beta1"
+	rbac "k8s.io/api/rbac/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -124,12 +124,12 @@ func createClusterRoleBindings(ctx context.Context, clientset *kubernetes.Client
 	}
 
 	for _, clusterRoleBinding := range clusterRoleBindings {
-		if _, err := clientset.RbacV1beta1().ClusterRoleBindings().Create(ctx, &clusterRoleBinding, metav1.CreateOptions{}); err != nil {
+		if _, err := clientset.RbacV1().ClusterRoleBindings().Create(ctx, &clusterRoleBinding, metav1.CreateOptions{}); err != nil {
 			if !apierrors.IsAlreadyExists(err) {
 				return fmt.Errorf("unable to create RBAC clusterrolebinding: %v", err)
 			}
 
-			if _, err := clientset.RbacV1beta1().ClusterRoleBindings().Update(ctx, &clusterRoleBinding, metav1.UpdateOptions{}); err != nil {
+			if _, err := clientset.RbacV1().ClusterRoleBindings().Update(ctx, &clusterRoleBinding, metav1.UpdateOptions{}); err != nil {
 				return fmt.Errorf("unable to update RBAC clusterrolebinding: %v", err)
 			}
 		}
