@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type SSHKey struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -85,10 +87,6 @@ func (e *SSHKey) Normalize(c *fi.Context) error {
 		e.KeyFingerprint = &keyFingerprint
 	}
 	return nil
-}
-
-func (e *SSHKey) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *SSHKey) CheckChanges(a, e, changes *SSHKey) error {

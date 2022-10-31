@@ -36,6 +36,8 @@ import (
 
 // +kops:fitask
 type Instance struct {
+	fi.DeltaRun
+
 	ID               *string
 	Name             *string
 	GroupName        *string
@@ -259,10 +261,6 @@ func (e *Instance) Find(c *fi.Context) (*Instance, error) {
 	actual.ServerGroup = e.ServerGroup
 
 	return actual, nil
-}
-
-func (e *Instance) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Instance) CheckChanges(a, e, changes *Instance) error {

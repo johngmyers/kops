@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type VPCDHCPOptionsAssociation struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -61,10 +63,6 @@ func (e *VPCDHCPOptionsAssociation) Find(c *fi.Context) (*VPCDHCPOptionsAssociat
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *VPCDHCPOptionsAssociation) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *VPCDHCPOptionsAssociation) CheckChanges(a, e, changes *VPCDHCPOptionsAssociation) error {

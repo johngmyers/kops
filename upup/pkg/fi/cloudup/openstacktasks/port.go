@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type Port struct {
+	fi.DeltaRun
+
 	ID                       *string
 	Name                     *string
 	InstanceGroupName        *string
@@ -165,10 +167,6 @@ func (s *Port) Find(context *fi.Context) (*Port, error) {
 	sort.Sort(SecurityGroupsByID(s.SecurityGroups))
 
 	return newPortTaskFromCloud(cloud, s.Lifecycle, &rs[0], s)
-}
-
-func (s *Port) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *Port) CheckChanges(a, e, changes *Port) error {

@@ -38,6 +38,8 @@ func IntValue(v *int) int {
 }
 
 type SecurityGroupRule struct {
+	fi.DeltaRun
+
 	ID             *string
 	Name           *string
 	Direction      *string
@@ -115,10 +117,6 @@ func (r *SecurityGroupRule) Find(context *fi.Context) (*SecurityGroupRule, error
 
 	r.ID = actual.ID
 	return actual, nil
-}
-
-func (r *SecurityGroupRule) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(r, context)
 }
 
 func (*SecurityGroupRule) CheckChanges(a, e, changes *SecurityGroupRule) error {

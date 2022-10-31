@@ -30,6 +30,8 @@ import (
 // LoadBalancer is an Azure Cloud LoadBalancer
 // +kops:fitask
 type LoadBalancer struct {
+	fi.DeltaRun
+
 	Name          *string
 	Lifecycle     fi.Lifecycle
 	ResourceGroup *ResourceGroup
@@ -102,11 +104,6 @@ func (lb *LoadBalancer) Find(c *fi.Context) (*LoadBalancer, error) {
 func (lb *LoadBalancer) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(lb.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (lb *LoadBalancer) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(lb, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

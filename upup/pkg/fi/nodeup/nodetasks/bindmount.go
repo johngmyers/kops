@@ -30,6 +30,8 @@ import (
 
 // BindMount performs bind mounts
 type BindMount struct {
+	fi.DeltaRun
+
 	Source     string   `json:"source"`
 	Mountpoint string   `json:"mountpoint"`
 	Options    []string `json:"options,omitempty"`
@@ -170,10 +172,6 @@ func (e *BindMount) Find(c *fi.Context) (*BindMount, error) {
 	}
 
 	return nil, nil
-}
-
-func (e *BindMount) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *BindMount) CheckChanges(a, e, changes *BindMount) error {

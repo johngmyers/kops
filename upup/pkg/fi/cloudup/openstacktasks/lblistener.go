@@ -28,6 +28,8 @@ import (
 
 // +kops:fitask
 type LBListener struct {
+	fi.DeltaRun
+
 	ID           *string
 	Name         *string
 	Pool         *LBPool
@@ -117,10 +119,6 @@ func (s *LBListener) Find(context *fi.Context) (*LBListener, error) {
 	}
 
 	return NewLBListenerTaskFromCloud(cloud, s.Lifecycle, &listenerList[0], s)
-}
-
-func (s *LBListener) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *LBListener) CheckChanges(a, e, changes *LBListener) error {

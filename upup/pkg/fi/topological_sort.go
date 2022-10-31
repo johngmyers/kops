@@ -112,6 +112,10 @@ func getDependencies(tasks map[string]Task, v reflect.Value) []Task {
 				// Ignore self - we are a struct, but not our own dependency!
 				return nil
 			}
+			if f != nil && f.Anonymous {
+				// Ignore embedded structs of self
+				return reflectutils.SkipReflection
+			}
 
 			// TODO: Can we / should we use a type-switch statement
 			intf := v.Addr().Interface()

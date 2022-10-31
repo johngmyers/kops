@@ -29,6 +29,8 @@ import (
 // RouteTable is an Azure Route Table.
 // +kops:fitask
 type RouteTable struct {
+	fi.DeltaRun
+
 	Name          *string
 	Lifecycle     fi.Lifecycle
 	ResourceGroup *ResourceGroup
@@ -77,11 +79,6 @@ func (r *RouteTable) Find(c *fi.Context) (*RouteTable, error) {
 func (r *RouteTable) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(r.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (r *RouteTable) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(r, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

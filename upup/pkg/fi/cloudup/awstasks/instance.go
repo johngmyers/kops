@@ -35,6 +35,8 @@ const MaxUserDataSize = 16384
 // Instance defines the instance specification
 // +kops:fitask
 type Instance struct {
+	fi.DeltaRun
+
 	ID        *string
 	Lifecycle fi.Lifecycle
 
@@ -192,10 +194,6 @@ func nameFromIAMARN(arn *string) *string {
 
 	name := strings.TrimPrefix(last, "instance-profile/")
 	return &name
-}
-
-func (e *Instance) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Instance) CheckChanges(a, e, changes *Instance) error {

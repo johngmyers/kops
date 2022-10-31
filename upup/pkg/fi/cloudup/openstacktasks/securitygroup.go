@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type SecurityGroup struct {
+	fi.DeltaRun
+
 	ID               *string
 	Name             *string
 	Description      *string
@@ -87,10 +89,6 @@ func getSecurityGroupByName(s *SecurityGroup, cloud openstack.OpenstackCloud) (*
 	actual.RemoveGroup = s.RemoveGroup
 	s.ID = actual.ID
 	return actual, nil
-}
-
-func (s *SecurityGroup) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *SecurityGroup) CheckChanges(a, e, changes *SecurityGroup) error {

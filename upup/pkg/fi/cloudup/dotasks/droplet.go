@@ -32,6 +32,8 @@ import (
 // will be managed by the Machines API
 // +kops:fitask
 type Droplet struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -118,10 +120,6 @@ func listDroplets(cloud do.DOCloud) ([]godo.Droplet, error) {
 	}
 
 	return allDroplets, nil
-}
-
-func (d *Droplet) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(d, c)
 }
 
 func (_ *Droplet) RenderDO(t *do.DOAPITarget, a, e, changes *Droplet) error {

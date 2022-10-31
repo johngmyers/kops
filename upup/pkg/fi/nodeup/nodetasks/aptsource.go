@@ -30,6 +30,8 @@ import (
 )
 
 type AptSource struct {
+	fi.DeltaRun
+
 	Name    string
 	Keyring string
 	Sources []string
@@ -45,10 +47,6 @@ func (f *AptSource) GetName() *string {
 
 func (f *AptSource) String() string {
 	return f.Name
-}
-
-func (f *AptSource) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(f, c)
 }
 
 func (*AptSource) CheckChanges(a, e, changes *AptSource) error {

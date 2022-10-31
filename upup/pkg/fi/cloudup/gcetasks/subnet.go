@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type Subnet struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -91,10 +93,6 @@ func (e *Subnet) Find(c *fi.Context) (*Subnet, error) {
 	actual.Shared = e.Shared
 
 	return actual, nil
-}
-
-func (e *Subnet) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Subnet) CheckChanges(a, e, changes *Subnet) error {

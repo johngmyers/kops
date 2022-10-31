@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type SSHKey struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -75,10 +77,6 @@ func (v *SSHKey) Find(c *fi.Context) (*SSHKey, error) {
 	}
 
 	return nil, nil
-}
-
-func (v *SSHKey) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(v, c)
 }
 
 func (_ *SSHKey) CheckChanges(a, e, changes *SSHKey) error {

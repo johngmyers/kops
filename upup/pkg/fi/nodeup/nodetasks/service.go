@@ -49,6 +49,8 @@ const (
 )
 
 type Service struct {
+	fi.DeltaRun
+
 	Name       string
 	Definition *string `json:"definition,omitempty"`
 	Running    *bool   `json:"running,omitempty"`
@@ -248,10 +250,6 @@ func getSystemdDependencies(serviceName string, definition string) ([]string, er
 		}
 	}
 	return dependencies, nil
-}
-
-func (e *Service) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Service) CheckChanges(a, e, changes *Service) error {

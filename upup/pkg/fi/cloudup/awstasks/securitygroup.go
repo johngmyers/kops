@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type SecurityGroup struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -129,10 +131,6 @@ func (e *SecurityGroup) findEc2(c *fi.Context) (*ec2.SecurityGroup, error) {
 	}
 	sg := response.SecurityGroups[0]
 	return sg, nil
-}
-
-func (e *SecurityGroup) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *SecurityGroup) ShouldCreate(a, e, changes *SecurityGroup) (bool, error) {

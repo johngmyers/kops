@@ -30,6 +30,8 @@ import (
 
 // UserTask is responsible for creating a user, by calling useradd
 type UserTask struct {
+	fi.DeltaRun
+
 	Name string
 
 	UID   int    `json:"uid"`
@@ -66,10 +68,6 @@ func (e *UserTask) Find(c *fi.Context) (*UserTask, error) {
 	}
 
 	return actual, nil
-}
-
-func (e *UserTask) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *UserTask) CheckChanges(a, e, changes *UserTask) error {

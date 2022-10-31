@@ -39,6 +39,8 @@ var _ DNSTarget = &NetworkLoadBalancer{}
 
 // +kops:fitask
 type NetworkLoadBalancer struct {
+	fi.DeltaRun
+
 	// We use the Name tag to find the existing NLB, because we are (more or less) unrestricted when
 	// it comes to tag values, but the LoadBalancerName is length limited
 	Name      *string
@@ -450,10 +452,6 @@ func (e *NetworkLoadBalancer) FindAddresses(context *fi.Context) ([]string, erro
 		return nil, nil
 	}
 	return []string{lbDnsName}, nil
-}
-
-func (e *NetworkLoadBalancer) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (e *NetworkLoadBalancer) Normalize(c *fi.Context) error {

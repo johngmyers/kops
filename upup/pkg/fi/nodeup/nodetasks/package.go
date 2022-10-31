@@ -35,6 +35,8 @@ import (
 )
 
 type Package struct {
+	fi.DeltaRun
+
 	Name string
 
 	Version      *string `json:"version,omitempty"`
@@ -261,10 +263,6 @@ func (e *Package) findYum(c *fi.Context) (*Package, error) {
 		Version: fi.String(installedVersion),
 		Healthy: healthy,
 	}, nil
-}
-
-func (e *Package) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Package) CheckChanges(a, e, changes *Package) error {

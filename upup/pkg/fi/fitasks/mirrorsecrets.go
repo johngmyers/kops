@@ -25,6 +25,8 @@ import (
 
 // +kops:fitask
 type MirrorSecrets struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -55,11 +57,6 @@ func (e *MirrorSecrets) Find(c *fi.Context) (*MirrorSecrets, error) {
 	// TODO: implement Find so that we aren't always mirroring
 	klog.V(2).Infof("MirrorSecrets::Find not implemented; always copying (inefficient)")
 	return nil, nil
-}
-
-// Run implements fi.Task::Run
-func (e *MirrorSecrets) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // CheckChanges implements fi.Task::CheckChanges

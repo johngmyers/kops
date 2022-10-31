@@ -28,6 +28,8 @@ import (
 
 // +kops:fitask
 type Volume struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -73,10 +75,6 @@ func (v *Volume) Find(c *fi.Context) (*Volume, error) {
 	}
 
 	return nil, nil
-}
-
-func (v *Volume) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(v, c)
 }
 
 func (_ *Volume) CheckChanges(a, e, changes *Volume) error {

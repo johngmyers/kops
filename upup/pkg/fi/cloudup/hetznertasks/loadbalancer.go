@@ -31,6 +31,8 @@ import (
 
 // +kops:fitask
 type LoadBalancer struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 	Network   *Network
@@ -143,10 +145,6 @@ func (v *LoadBalancer) Find(c *fi.Context) (*LoadBalancer, error) {
 	}
 
 	return nil, nil
-}
-
-func (v *LoadBalancer) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(v, c)
 }
 
 func (_ *LoadBalancer) CheckChanges(a, e, changes *LoadBalancer) error {

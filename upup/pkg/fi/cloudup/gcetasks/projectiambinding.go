@@ -30,6 +30,8 @@ import (
 // ProjectIAMBinding represents an IAM rule on a project
 // +kops:fitask
 type ProjectIAMBinding struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -78,10 +80,6 @@ func (e *ProjectIAMBinding) Find(c *fi.Context) (*ProjectIAMBinding, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *ProjectIAMBinding) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *ProjectIAMBinding) CheckChanges(a, e, changes *ProjectIAMBinding) error {

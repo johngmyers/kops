@@ -34,6 +34,8 @@ import (
 
 // LoadImageTask is responsible for downloading a docker image
 type LoadImageTask struct {
+	fi.DeltaRun
+
 	Name    string
 	Sources []string
 	Hash    string
@@ -77,10 +79,6 @@ func (t *LoadImageTask) String() string {
 func (e *LoadImageTask) Find(c *fi.Context) (*LoadImageTask, error) {
 	klog.Warningf("LoadImageTask checking if image present not yet implemented")
 	return nil, nil
-}
-
-func (e *LoadImageTask) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *LoadImageTask) CheckChanges(a, e, changes *LoadImageTask) error {

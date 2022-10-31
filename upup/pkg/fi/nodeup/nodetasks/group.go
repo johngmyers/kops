@@ -30,6 +30,8 @@ import (
 
 // GroupTask is responsible for creating a group, by calling groupadd
 type GroupTask struct {
+	fi.DeltaRun
+
 	Name   string
 	GID    *int
 	System bool
@@ -66,10 +68,6 @@ func (e *GroupTask) Find(c *fi.Context) (*GroupTask, error) {
 	actual.System = e.System
 
 	return actual, nil
-}
-
-func (e *GroupTask) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *GroupTask) CheckChanges(a, e, changes *GroupTask) error {

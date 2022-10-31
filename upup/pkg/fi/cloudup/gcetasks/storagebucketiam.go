@@ -30,6 +30,8 @@ import (
 // StorageBucketIAM represents an IAM rule on a google cloud storage bucket
 // +kops:fitask
 type StorageBucketIAM struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -77,10 +79,6 @@ func (e *StorageBucketIAM) Find(c *fi.Context) (*StorageBucketIAM, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *StorageBucketIAM) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *StorageBucketIAM) CheckChanges(a, e, changes *StorageBucketIAM) error {

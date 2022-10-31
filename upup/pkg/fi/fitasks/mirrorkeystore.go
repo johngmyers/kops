@@ -24,6 +24,8 @@ import (
 
 // +kops:fitask
 type MirrorKeystore struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -54,11 +56,6 @@ func (e *MirrorKeystore) Find(c *fi.Context) (*MirrorKeystore, error) {
 	// TODO: implement Find so that we aren't always mirroring
 	klog.V(2).Infof("MirrorKeystore::Find not implemented; always copying (inefficient)")
 	return nil, nil
-}
-
-// Run implements fi.Task::Run
-func (e *MirrorKeystore) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // CheckChanges implements fi.Task::CheckChanges

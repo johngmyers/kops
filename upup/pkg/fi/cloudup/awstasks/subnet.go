@@ -34,6 +34,8 @@ import (
 
 // +kops:fitask
 type Subnet struct {
+	fi.DeltaRun
+
 	Name *string
 
 	// ShortName is a shorter name, for use in terraform outputs
@@ -160,10 +162,6 @@ func (e *Subnet) findEc2Subnet(c *fi.Context) (*ec2.Subnet, error) {
 
 	subnet := response.Subnets[0]
 	return subnet, nil
-}
-
-func (e *Subnet) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Subnet) CheckChanges(a, e, changes *Subnet) error {

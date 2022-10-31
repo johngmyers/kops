@@ -44,6 +44,8 @@ const (
 // InstanceTemplate represents a GCE InstanceTemplate
 // +kops:fitask
 type InstanceTemplate struct {
+	fi.DeltaRun
+
 	Name *string
 
 	// NamePrefix is used as the prefix for the names; we add a timestamp.  Max = InstanceTemplateNamePrefixMaxLength
@@ -227,10 +229,6 @@ func (e *InstanceTemplate) Find(c *fi.Context) (*InstanceTemplate, error) {
 	}
 
 	return nil, nil
-}
-
-func (e *InstanceTemplate) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *InstanceTemplate) CheckChanges(a, e, changes *InstanceTemplate) error {

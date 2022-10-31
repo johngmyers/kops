@@ -30,6 +30,8 @@ import (
 // TargetPool represents a GCE TargetPool
 // +kops:fitask
 type TargetPool struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 }
@@ -59,10 +61,6 @@ func (e *TargetPool) Find(c *fi.Context) (*TargetPool, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *TargetPool) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *TargetPool) CheckChanges(a, e, changes *TargetPool) error {

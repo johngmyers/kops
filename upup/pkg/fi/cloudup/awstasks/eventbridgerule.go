@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type EventBridgeRule struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Lifecycle fi.Lifecycle
@@ -85,10 +87,6 @@ func (eb *EventBridgeRule) Find(c *fi.Context) (*EventBridgeRule, error) {
 		Tags:         mapEventBridgeTagsToMap(tagResponse.Tags),
 	}
 	return actual, nil
-}
-
-func (eb *EventBridgeRule) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(eb, c)
 }
 
 func (_ *EventBridgeRule) CheckChanges(a, e, changes *EventBridgeRule) error {

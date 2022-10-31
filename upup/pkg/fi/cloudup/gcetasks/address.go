@@ -29,6 +29,8 @@ import (
 
 // +kops:fitask
 type Address struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -109,10 +111,6 @@ func (e *Address) FindAddresses(context *fi.Context) ([]string, error) {
 		return nil, nil
 	}
 	return []string{fi.StringValue(actual.IPAddress)}, nil
-}
-
-func (e *Address) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Address) CheckChanges(a, e, changes *Address) error {

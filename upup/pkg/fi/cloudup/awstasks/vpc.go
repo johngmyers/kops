@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type VPC struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -166,10 +168,6 @@ func (s *VPC) CheckChanges(a, e, changes *VPC) error {
 		}
 	}
 	return nil
-}
-
-func (e *VPC) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *VPC) RenderAWS(t *awsup.AWSAPITarget, a, e, changes *VPC) error {

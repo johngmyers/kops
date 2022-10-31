@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type LBPool struct {
+	fi.DeltaRun
+
 	ID           *string
 	Name         *string
 	Lifecycle    fi.Lifecycle
@@ -101,10 +103,6 @@ func (p *LBPool) Find(context *fi.Context) (*LBPool, error) {
 	}
 
 	return NewLBPoolTaskFromCloud(cloud, p.Lifecycle, &poolList[0], p)
-}
-
-func (s *LBPool) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *LBPool) CheckChanges(a, e, changes *LBPool) error {

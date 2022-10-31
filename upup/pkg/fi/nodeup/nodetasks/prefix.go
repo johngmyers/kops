@@ -35,6 +35,8 @@ import (
 )
 
 type Prefix struct {
+	fi.DeltaRun
+
 	Name string
 }
 
@@ -72,10 +74,6 @@ func (e *Prefix) Find(c *fi.Context) (*Prefix, error) {
 		Name: e.Name,
 	}
 	return actual, nil
-}
-
-func (e *Prefix) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Prefix) CheckChanges(a, e, changes *Prefix) error {

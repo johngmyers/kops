@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type DHCPOptions struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -108,10 +110,6 @@ func (e *DHCPOptions) Find(c *fi.Context) (*DHCPOptions, error) {
 	actual.Shared = e.Shared
 
 	return actual, nil
-}
-
-func (e *DHCPOptions) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *DHCPOptions) CheckChanges(a, e, changes *DHCPOptions) error {

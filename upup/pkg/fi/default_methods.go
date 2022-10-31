@@ -23,9 +23,17 @@ import (
 	"k8s.io/kops/util/pkg/reflectutils"
 )
 
-// DefaultDeltaRunMethod implements the standard change-based run procedure:
+type DeltaRun struct{}
+
+var _ Task = &DeltaRun{}
+
+func (d *DeltaRun) Run(c *Context) error {
+	return defaultDeltaRunMethod(d, c)
+}
+
+// defaultDeltaRunMethod implements the standard change-based run procedure:
 // find the existing item; compare properties; call render with (actual, expected, changes)
-func DefaultDeltaRunMethod(e Task, c *Context) error {
+func defaultDeltaRunMethod(e Task, c *Context) error {
 	var a Task
 	var err error
 

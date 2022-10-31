@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type NatGateway struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -290,10 +292,6 @@ func (s *NatGateway) CheckChanges(a, e, changes *NatGateway) error {
 		}
 	}
 	return nil
-}
-
-func (e *NatGateway) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *NatGateway) RenderAWS(t *awsup.AWSAPITarget, a, e, changes *NatGateway) error {

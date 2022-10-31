@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type Keypair struct {
+	fi.DeltaRun
+
 	// Name is the name of the keypair
 	Name *string
 	// AlternateNames a list of alternative names for this certificate
@@ -113,10 +115,6 @@ func (e *Keypair) Find(c *fi.Context) (*Keypair, error) {
 	}
 
 	return actual, nil
-}
-
-func (e *Keypair) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (e *Keypair) Normalize(c *fi.Context) error {

@@ -40,6 +40,8 @@ const CloudTagInstanceGroupRolePrefix = "k8s.io/role/"
 // AutoscalingGroup provides the definition for a autoscaling group in aws
 // +kops:fitask
 type AutoscalingGroup struct {
+	fi.DeltaRun
+
 	// Name is the name of the ASG
 	Name *string
 	// Lifecycle is the resource lifecycle
@@ -317,11 +319,6 @@ func (e *AutoscalingGroup) Normalize(c *fi.Context) error {
 	c.Cloud.(awsup.AWSCloud).AddTags(e.Name, e.Tags)
 
 	return nil
-}
-
-// Run is responsible for running the task
-func (e *AutoscalingGroup) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // CheckChanges is responsible for checking for changes??

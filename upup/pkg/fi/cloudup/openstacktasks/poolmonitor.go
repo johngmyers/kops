@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type PoolMonitor struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Lifecycle fi.Lifecycle
@@ -76,10 +78,6 @@ func (p *PoolMonitor) Find(context *fi.Context) (*PoolMonitor, error) {
 	}
 	p.ID = actual.ID
 	return actual, nil
-}
-
-func (p *PoolMonitor) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(p, context)
 }
 
 func (_ *PoolMonitor) CheckChanges(a, e, changes *PoolMonitor) error {

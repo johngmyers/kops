@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type LB struct {
+	fi.DeltaRun
+
 	ID            *string
 	Name          *string
 	Subnet        *string
@@ -168,10 +170,6 @@ func (s *LB) Find(context *fi.Context) (*LB, error) {
 	}
 
 	return NewLBTaskFromCloud(cloud, s.Lifecycle, &lbs[0], s)
-}
-
-func (s *LB) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *LB) CheckChanges(a, e, changes *LB) error {

@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type Volume struct {
+	fi.DeltaRun
+
 	ID               *string
 	Name             *string
 	AvailabilityZone *string
@@ -84,10 +86,6 @@ func (c *Volume) Normalize(context *fi.Context) error {
 		c.Tags[k] = v
 	}
 	return nil
-}
-
-func (c *Volume) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(c, context)
 }
 
 func (_ *Volume) CheckChanges(a, e, changes *Volume) error {

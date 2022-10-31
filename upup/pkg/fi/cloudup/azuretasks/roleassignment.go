@@ -38,6 +38,8 @@ import (
 // RoleAssignment is an Azure Role Assignment.
 // +kops:fitask
 type RoleAssignment struct {
+	fi.DeltaRun
+
 	// Name is the name of the RoleAssignment task. This is
 	// different from a name of Role Assignment, which is GUID.
 	// As kops cannot give a fixed name to the Role Assignment
@@ -124,11 +126,6 @@ func (r *RoleAssignment) Find(c *fi.Context) (*RoleAssignment, error) {
 		ID:        found.ID,
 		RoleDefID: found.RoleDefinitionID,
 	}, nil
-}
-
-// Run implements fi.Task.Run.
-func (r *RoleAssignment) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(r, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

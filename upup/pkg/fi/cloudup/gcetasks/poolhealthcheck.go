@@ -27,6 +27,8 @@ import (
 // PoolHealthCheck represents a GCE target pool HealthCheck
 // +kops:fitask
 type PoolHealthCheck struct {
+	fi.DeltaRun
+
 	Name        *string
 	Lifecycle   fi.Lifecycle
 	Healthcheck *HTTPHealthcheck
@@ -74,10 +76,6 @@ func (e *PoolHealthCheck) Find(c *fi.Context) (*PoolHealthCheck, error) {
 		}
 	}
 	return nil, nil
-}
-
-func (e *PoolHealthCheck) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *PoolHealthCheck) CheckChanges(a, e, changes *PoolHealthCheck) error {

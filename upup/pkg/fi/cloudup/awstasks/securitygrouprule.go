@@ -34,6 +34,8 @@ import (
 
 // +kops:fitask
 type SecurityGroupRule struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Lifecycle fi.Lifecycle
@@ -196,10 +198,6 @@ func (e *SecurityGroupRule) matches(rule *ec2.SecurityGroupRule) bool {
 		}
 	}
 	return true
-}
-
-func (e *SecurityGroupRule) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *SecurityGroupRule) CheckChanges(a, e, changes *SecurityGroupRule) error {

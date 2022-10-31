@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type FloatingIP struct {
+	fi.DeltaRun
+
 	Name         *string
 	ID           *string
 	LB           *LB
@@ -220,10 +222,6 @@ func findFipByPortID(cloud openstack.OpenstackCloud, id string) (fip *l3floating
 		return nil, fmt.Errorf("multiple floating ips associated to port: %s", id)
 	}
 	return &fips[0], nil
-}
-
-func (e *FloatingIP) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *FloatingIP) CheckChanges(a, e, changes *FloatingIP) error {

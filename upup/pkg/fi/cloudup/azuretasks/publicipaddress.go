@@ -29,6 +29,8 @@ import (
 // PublicIPAddress is an Azure Cloud Public IP Address
 // +kops:fitask
 type PublicIPAddress struct {
+	fi.DeltaRun
+
 	Name          *string
 	Lifecycle     fi.Lifecycle
 	ResourceGroup *ResourceGroup
@@ -79,11 +81,6 @@ func (p *PublicIPAddress) Find(c *fi.Context) (*PublicIPAddress, error) {
 func (p *PublicIPAddress) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(p.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (p *PublicIPAddress) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(p, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

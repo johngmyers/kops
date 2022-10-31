@@ -29,6 +29,8 @@ import (
 // StorageBucketAcl represents an ACL rule on a google cloud storage bucket
 // +kops:fitask
 type StorageBucketAcl struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -70,10 +72,6 @@ func (e *StorageBucketAcl) Find(c *fi.Context) (*StorageBucketAcl, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *StorageBucketAcl) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *StorageBucketAcl) CheckChanges(a, e, changes *StorageBucketAcl) error {

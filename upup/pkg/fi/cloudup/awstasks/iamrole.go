@@ -42,6 +42,8 @@ const CloudTagServiceAccountNamespace = "service-account.kops.k8s.io/namespace"
 
 // +kops:fitask
 type IAMRole struct {
+	fi.DeltaRun
+
 	ID        *string
 	Lifecycle fi.Lifecycle
 
@@ -127,10 +129,6 @@ func (e *IAMRole) Find(c *fi.Context) (*IAMRole, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *IAMRole) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *IAMRole) ShouldCreate(a, e, changes *IAMRole) (bool, error) {

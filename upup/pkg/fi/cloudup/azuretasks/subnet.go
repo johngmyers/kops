@@ -28,6 +28,8 @@ import (
 // Subnet is an Azure subnet.
 // +kops:fitask
 type Subnet struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -76,11 +78,6 @@ func (s *Subnet) Find(c *fi.Context) (*Subnet, error) {
 		},
 		CIDR: found.AddressPrefix,
 	}, nil
-}
-
-// Run implements fi.Task.Run.
-func (s *Subnet) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

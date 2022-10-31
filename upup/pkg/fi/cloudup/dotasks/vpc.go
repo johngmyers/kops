@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type VPC struct {
+	fi.DeltaRun
+
 	Name      *string
 	ID        *string
 	Lifecycle fi.Lifecycle
@@ -64,10 +66,6 @@ func (v *VPC) Find(c *fi.Context) (*VPC, error) {
 
 	// VPC = nil if not found
 	return nil, nil
-}
-
-func (v *VPC) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(v, c)
 }
 
 func (_ *VPC) CheckChanges(a, e, changes *VPC) error {

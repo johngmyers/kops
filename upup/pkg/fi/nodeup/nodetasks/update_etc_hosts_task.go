@@ -28,6 +28,8 @@ import (
 
 // UpdateEtcHostsTask is responsible for updating /etc/hosts to set some DNS records, for gossip.
 type UpdateEtcHostsTask struct {
+	fi.DeltaRun
+
 	// Name is a reference for our task
 	Name string
 
@@ -62,10 +64,6 @@ func (e *UpdateEtcHostsTask) Find(c *fi.Context) (*UpdateEtcHostsTask, error) {
 	// UpdateHostsFileWithRecords skips the update /etc/hosts if there are no changes,
 	// so we don't check existing values here.
 	return nil, nil
-}
-
-func (e *UpdateEtcHostsTask) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *UpdateEtcHostsTask) CheckChanges(a, e, changes *UpdateEtcHostsTask) error {

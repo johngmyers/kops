@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type DNSName struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -188,10 +190,6 @@ func findDNSTargetELB(cloud awsup.AWSCloud, aliasTarget *route53.AliasTarget, dn
 		return &ClassicLoadBalancer{Name: fi.String(nameTag)}, nil
 	}
 	return nil, nil
-}
-
-func (e *DNSName) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *DNSName) CheckChanges(a, e, changes *DNSName) error {

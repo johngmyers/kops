@@ -30,6 +30,8 @@ import (
 // WarmPool provdes the definition for an ASG warm pool in aws.
 // +kops:fitask
 type WarmPool struct {
+	fi.DeltaRun
+
 	// Name is the name of the ASG.
 	Name *string
 	// Lifecycle is the resource lifecycle.
@@ -73,10 +75,6 @@ func (e *WarmPool) Find(c *fi.Context) (*WarmPool, error) {
 		MinSize:   fi.Int64Value(warmPool.WarmPoolConfiguration.MinSize),
 	}
 	return actual, nil
-}
-
-func (e *WarmPool) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (*WarmPool) CheckChanges(a, e, changes *WarmPool) error {

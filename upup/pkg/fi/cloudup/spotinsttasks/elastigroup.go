@@ -41,6 +41,8 @@ import (
 
 // +kops:fitask
 type Elastigroup struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -483,10 +485,6 @@ func (e *Elastigroup) CheckExisting(c *fi.Context) bool {
 	cloud := c.Cloud.(awsup.AWSCloud)
 	group, err := e.find(cloud.Spotinst().Elastigroup())
 	return err == nil && group != nil
-}
-
-func (e *Elastigroup) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Elastigroup) CheckChanges(a, e, changes *Elastigroup) error {

@@ -29,6 +29,8 @@ import (
 // Disk is an Azure Managed Disk.
 // +kops:fitask
 type Disk struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -80,11 +82,6 @@ func (d *Disk) Find(c *fi.Context) (*Disk, error) {
 func (d *Disk) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(d.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (d *Disk) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(d, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

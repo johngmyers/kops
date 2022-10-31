@@ -29,6 +29,8 @@ import (
 
 // +kops:fitask
 type InstanceGroupManager struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -75,10 +77,6 @@ func (e *InstanceGroupManager) Find(c *fi.Context) (*InstanceGroupManager, error
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *InstanceGroupManager) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *InstanceGroupManager) CheckChanges(a, e, changes *InstanceGroupManager) error {

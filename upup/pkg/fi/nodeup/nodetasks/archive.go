@@ -36,6 +36,8 @@ import (
 
 // Archive task downloads and extracts a tar file
 type Archive struct {
+	fi.DeltaRun
+
 	Name string
 
 	// Source is the location for the archive
@@ -121,11 +123,6 @@ func (e *Archive) Find(c *fi.Context) (*Archive, error) {
 
 	// Existing version is different, force a reinstall
 	return nil, nil
-}
-
-// Run implements fi.Task::Run
-func (e *Archive) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // CheckChanges implements fi.Task::CheckChanges

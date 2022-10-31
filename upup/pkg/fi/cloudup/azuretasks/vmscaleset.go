@@ -92,6 +92,8 @@ func parseLoadBalancerID(lb string) (*loadBalancerID, error) {
 // VMScaleSet is an Azure VM Scale Set.
 // +kops:fitask
 type VMScaleSet struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -245,11 +247,6 @@ func (s *VMScaleSet) Find(c *fi.Context) (*VMScaleSet, error) {
 func (s *VMScaleSet) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(s.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (s *VMScaleSet) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

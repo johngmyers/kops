@@ -39,6 +39,8 @@ import (
 
 // +kops:fitask
 type Ocean struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -330,10 +332,6 @@ func (o *Ocean) CheckExisting(c *fi.Context) bool {
 	cloud := c.Cloud.(awsup.AWSCloud)
 	ocean, err := o.find(cloud.Spotinst().Ocean())
 	return err == nil && ocean != nil
-}
-
-func (o *Ocean) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(o, c)
 }
 
 func (s *Ocean) CheckChanges(a, e, changes *Ocean) error {

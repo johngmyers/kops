@@ -36,6 +36,8 @@ import (
 // DNSZone is a zone object in a dns provider
 // +kops:fitask
 type DNSZone struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -159,10 +161,6 @@ func (e *DNSZone) findExisting(cloud awsup.AWSCloud) (*route53.GetHostedZoneOutp
 
 		return response, nil
 	}
-}
-
-func (e *DNSZone) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *DNSZone) CheckChanges(a, e, changes *DNSZone) error {

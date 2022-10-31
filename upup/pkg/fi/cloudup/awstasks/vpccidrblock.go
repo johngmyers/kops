@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type VPCCIDRBlock struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -88,10 +90,6 @@ func (e *VPCCIDRBlock) Find(c *fi.Context) (*VPCCIDRBlock, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *VPCCIDRBlock) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *VPCCIDRBlock) CheckChanges(a, e, changes *VPCCIDRBlock) error {

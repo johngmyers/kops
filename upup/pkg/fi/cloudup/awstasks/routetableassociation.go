@@ -31,6 +31,8 @@ import (
 
 // +kops:fitask
 type RouteTableAssociation struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -89,10 +91,6 @@ func (e *RouteTableAssociation) Find(c *fi.Context) (*RouteTableAssociation, err
 	}
 
 	return nil, nil
-}
-
-func (e *RouteTableAssociation) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *RouteTableAssociation) CheckChanges(a, e, changes *RouteTableAssociation) error {

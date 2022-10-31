@@ -29,6 +29,8 @@ import (
 
 // +kops:fitask
 type Firewall struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -83,10 +85,6 @@ func (v *Firewall) Find(c *fi.Context) (*Firewall, error) {
 	}
 
 	return nil, nil
-}
-
-func (v *Firewall) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(v, c)
 }
 
 func (_ *Firewall) CheckChanges(a, e, changes *Firewall) error {

@@ -29,6 +29,8 @@ import (
 
 // +kops:fitask
 type VPCAmazonIPv6CIDRBlock struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -64,10 +66,6 @@ func (e *VPCAmazonIPv6CIDRBlock) Find(c *fi.Context) (*VPCAmazonIPv6CIDRBlock, e
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *VPCAmazonIPv6CIDRBlock) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *VPCAmazonIPv6CIDRBlock) CheckChanges(a, e, changes *VPCAmazonIPv6CIDRBlock) error {

@@ -41,6 +41,8 @@ var _ DNSTarget = &ClassicLoadBalancer{}
 
 // +kops:fitask
 type ClassicLoadBalancer struct {
+	fi.DeltaRun
+
 	// We use the Name tag to find the existing ELB, because we are (more or less) unrestricted when
 	// it comes to tag values, but the LoadBalancerName is length limited
 	Name      *string
@@ -362,10 +364,6 @@ func (e *ClassicLoadBalancer) FindAddresses(context *fi.Context) ([]string, erro
 		return nil, nil
 	}
 	return []string{lbDnsName}, nil
-}
-
-func (e *ClassicLoadBalancer) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *ClassicLoadBalancer) ShouldCreate(a, e, changes *ClassicLoadBalancer) (bool, error) {

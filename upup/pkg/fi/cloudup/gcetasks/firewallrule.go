@@ -31,6 +31,8 @@ import (
 // FirewallRule represents a GCE firewall rules
 // +kops:fitask
 type FirewallRule struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -80,10 +82,6 @@ func (e *FirewallRule) Find(c *fi.Context) (*FirewallRule, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *FirewallRule) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // Normalize applies some validation that isn't technically required,

@@ -46,6 +46,8 @@ const (
 
 // Router is a Router task.
 type Router struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -116,11 +118,6 @@ func (r *Router) url(project string) string {
 		Region:  *r.Region,
 	}
 	return u.BuildURL()
-}
-
-// Run implements fi.Task.Run.
-func (r *Router) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(r, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

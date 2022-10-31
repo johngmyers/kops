@@ -38,6 +38,8 @@ import (
 
 // +kops:fitask
 type IAMRolePolicy struct {
+	fi.DeltaRun
+
 	ID        *string
 	Lifecycle fi.Lifecycle
 
@@ -141,10 +143,6 @@ func (e *IAMRolePolicy) Find(c *fi.Context) (*IAMRolePolicy, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return &actual, nil
-}
-
-func (e *IAMRolePolicy) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *IAMRolePolicy) CheckChanges(a, e, changes *IAMRolePolicy) error {

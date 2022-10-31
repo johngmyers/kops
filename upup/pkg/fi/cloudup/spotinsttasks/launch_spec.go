@@ -37,6 +37,8 @@ import (
 
 // +kops:fitask
 type LaunchSpec struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -336,10 +338,6 @@ func (o *LaunchSpec) Find(c *fi.Context) (*LaunchSpec, error) {
 func (o *LaunchSpec) CheckExisting(c *fi.Context) bool {
 	spec, err := o.Find(c)
 	return err == nil && spec != nil
-}
-
-func (o *LaunchSpec) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(o, c)
 }
 
 func (s *LaunchSpec) CheckChanges(a, e, changes *LaunchSpec) error {

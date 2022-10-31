@@ -34,6 +34,8 @@ import (
 
 // +kops:fitask
 type LoadBalancer struct {
+	fi.DeltaRun
+
 	Name      *string
 	ID        *string
 	Lifecycle fi.Lifecycle
@@ -87,10 +89,6 @@ func (lb *LoadBalancer) Find(c *fi.Context) (*LoadBalancer, error) {
 		Lifecycle:    lb.Lifecycle,
 		ForAPIServer: lb.ForAPIServer,
 	}, nil
-}
-
-func (lb *LoadBalancer) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(lb, c)
 }
 
 func (_ *LoadBalancer) CheckChanges(a, e, changes *LoadBalancer) error {

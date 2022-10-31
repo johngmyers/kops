@@ -28,6 +28,8 @@ import (
 // HTTPHealthcheck represents a GCE Healthcheck
 // +kops:fitask
 type HTTPHealthcheck struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -60,10 +62,6 @@ func (e *HTTPHealthcheck) Find(c *fi.Context) (*HTTPHealthcheck, error) {
 	actual.Lifecycle = e.Lifecycle
 	e.SelfLink = r.SelfLink
 	return actual, nil
-}
-
-func (e *HTTPHealthcheck) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *HTTPHealthcheck) CheckChanges(a, e, changes *HTTPHealthcheck) error {

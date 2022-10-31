@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type IAMInstanceProfileRole struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -77,10 +79,6 @@ func (e *IAMInstanceProfileRole) Find(c *fi.Context) (*IAMInstanceProfileRole, e
 		return actual, nil
 	}
 	return nil, nil
-}
-
-func (e *IAMInstanceProfileRole) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *IAMInstanceProfileRole) CheckChanges(a, e, changes *IAMInstanceProfileRole) error {

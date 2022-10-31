@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type ServerGroup struct {
+	fi.DeltaRun
+
 	ID          *string
 	Name        *string
 	ClusterName *string
@@ -100,10 +102,6 @@ func (s *ServerGroup) Find(context *fi.Context) (*ServerGroup, error) {
 	s.ID = actual.ID
 	s.members = actual.members
 	return actual, nil
-}
-
-func (s *ServerGroup) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *ServerGroup) CheckChanges(a, e, changes *ServerGroup) error {

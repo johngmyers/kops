@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type PoolAssociation struct {
+	fi.DeltaRun
+
 	ID            *string
 	Name          *string
 	Lifecycle     fi.Lifecycle
@@ -116,10 +118,6 @@ func (p *PoolAssociation) Find(context *fi.Context) (*PoolAssociation, error) {
 	}
 	p.ID = actual.ID
 	return actual, nil
-}
-
-func (s *PoolAssociation) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (_ *PoolAssociation) CheckChanges(a, e, changes *PoolAssociation) error {

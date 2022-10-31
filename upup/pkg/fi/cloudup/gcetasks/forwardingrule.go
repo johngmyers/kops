@@ -30,6 +30,8 @@ import (
 // ForwardingRule represents a GCE ForwardingRule
 // +kops:fitask
 type ForwardingRule struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -95,10 +97,6 @@ func (e *ForwardingRule) Find(c *fi.Context) (*ForwardingRule, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *ForwardingRule) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *ForwardingRule) CheckChanges(a, e, changes *ForwardingRule) error {

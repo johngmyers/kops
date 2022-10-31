@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type Router struct {
+	fi.DeltaRun
+
 	ID                    *string
 	Name                  *string
 	Lifecycle             fi.Lifecycle
@@ -69,10 +71,6 @@ func (n *Router) Find(context *fi.Context) (*Router, error) {
 		return nil, fmt.Errorf("found multiple routers with name: %s", fi.StringValue(n.Name))
 	}
 	return NewRouterTaskFromCloud(cloud, n.Lifecycle, &rs[0], n)
-}
-
-func (c *Router) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(c, context)
 }
 
 func (_ *Router) CheckChanges(a, e, changes *Router) error {

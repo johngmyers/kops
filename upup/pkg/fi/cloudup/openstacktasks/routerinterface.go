@@ -28,6 +28,8 @@ import (
 
 // +kops:fitask
 type RouterInterface struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Router    *Router
@@ -91,10 +93,6 @@ func (i *RouterInterface) Find(context *fi.Context) (*RouterInterface, error) {
 		}
 	}
 	return actual, nil
-}
-
-func (i *RouterInterface) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(i, context)
 }
 
 func (*RouterInterface) CheckChanges(a, e, changes *RouterInterface) error {

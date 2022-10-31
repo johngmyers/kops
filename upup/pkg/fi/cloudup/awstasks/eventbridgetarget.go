@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type EventBridgeTarget struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Lifecycle fi.Lifecycle
@@ -87,10 +89,6 @@ func (eb *EventBridgeTarget) Find(c *fi.Context) (*EventBridgeTarget, error) {
 	}
 
 	return nil, nil
-}
-
-func (eb *EventBridgeTarget) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(eb, c)
 }
 
 func (_ *EventBridgeTarget) CheckChanges(a, e, changes *EventBridgeTarget) error {

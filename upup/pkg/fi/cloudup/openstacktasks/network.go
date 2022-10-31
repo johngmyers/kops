@@ -27,6 +27,8 @@ import (
 
 // +kops:fitask
 type Network struct {
+	fi.DeltaRun
+
 	ID                    *string
 	Name                  *string
 	Lifecycle             fi.Lifecycle
@@ -82,10 +84,6 @@ func (n *Network) Find(context *fi.Context) (*Network, error) {
 	}
 	n.ID = actual.ID
 	return actual, nil
-}
-
-func (c *Network) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(c, context)
 }
 
 func (_ *Network) CheckChanges(a, e, changes *Network) error {

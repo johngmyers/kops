@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type TargetGroup struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 	VPC       *VPC
@@ -145,10 +147,6 @@ func FindTargetGroupByName(cloud awsup.AWSCloud, findName string) (*elbv2.Target
 	}
 
 	return resp.TargetGroups[0], nil
-}
-
-func (e *TargetGroup) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *TargetGroup) ShouldCreate(a, e, changes *TargetGroup) (bool, error) {

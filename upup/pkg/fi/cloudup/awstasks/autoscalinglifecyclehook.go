@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type AutoscalingLifecycleHook struct {
+	fi.DeltaRun
+
 	ID        *string
 	Name      *string
 	Lifecycle fi.Lifecycle
@@ -90,10 +92,6 @@ func (h *AutoscalingLifecycleHook) Find(c *fi.Context) (*AutoscalingLifecycleHoo
 	}
 
 	return actual, nil
-}
-
-func (h *AutoscalingLifecycleHook) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(h, c)
 }
 
 func (_ *AutoscalingLifecycleHook) CheckChanges(a, e, changes *AutoscalingLifecycleHook) error {

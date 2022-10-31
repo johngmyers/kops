@@ -27,12 +27,14 @@ import (
 	"k8s.io/kops/upup/pkg/fi/cloudup/terraformWriter"
 )
 
-// +kops:fitask
 // HealthCheck represents a GCE "healthcheck" type - this is the
 // non-deprecated new-style HC, which combines the deprecated HTTPHealthCheck
 // and HTTPSHealthCheck.  Those HCs are still needed for some types, so both
 // are implemented in kops, but this one should be preferred when possible.
+// +kops:fitask
 type HealthCheck struct {
+	fi.DeltaRun
+
 	Name      *string
 	Port      int64
 	Lifecycle fi.Lifecycle
@@ -77,10 +79,6 @@ func (e *HealthCheck) find(cloud gce.GCECloud) (*HealthCheck, error) {
 	}
 
 	return actual, nil
-}
-
-func (e *HealthCheck) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *HealthCheck) CheckChanges(a, e, changes *HealthCheck) error {

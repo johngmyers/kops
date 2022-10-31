@@ -34,6 +34,8 @@ import (
 
 // +kops:fitask
 type IAMOIDCProvider struct {
+	fi.DeltaRun
+
 	Lifecycle fi.Lifecycle
 
 	ClientIDs   []*string
@@ -93,10 +95,6 @@ func (e *IAMOIDCProvider) Find(c *fi.Context) (*IAMOIDCProvider, error) {
 		}
 	}
 	return nil, nil
-}
-
-func (e *IAMOIDCProvider) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *IAMOIDCProvider) CheckChanges(a, e, changes *IAMOIDCProvider) error {

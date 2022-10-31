@@ -33,6 +33,8 @@ import (
 // ElasticIP manages an AWS Address (ElasticIP)
 // +kops:fitask
 type ElasticIP struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -184,14 +186,6 @@ func (e *ElasticIP) find(cloud awsup.AWSCloud) (*ElasticIP, error) {
 		return actual, nil
 	}
 	return nil, nil
-}
-
-// Run is called to execute this task.
-// This is the main entry point of the task, and will actually
-// connect our internal resource representation to an actual
-// resource in AWS
-func (e *ElasticIP) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 // CheckChanges validates the resource. EIPs are simple, so virtually no

@@ -31,6 +31,8 @@ import (
 
 // +kops:fitask
 type ServiceAccount struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -88,10 +90,6 @@ func (e *ServiceAccount) Find(c *fi.Context) (*ServiceAccount, error) {
 	actual.Shared = e.Shared
 
 	return actual, nil
-}
-
-func (e *ServiceAccount) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *ServiceAccount) CheckChanges(a, e, changes *ServiceAccount) error {

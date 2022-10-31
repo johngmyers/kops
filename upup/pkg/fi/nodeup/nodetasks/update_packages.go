@@ -30,6 +30,8 @@ import (
 )
 
 type UpdatePackages struct {
+	fi.DeltaRun
+
 	// We can't be completely empty or we don't run
 	Updated bool
 }
@@ -56,10 +58,6 @@ func (p *UpdatePackages) String() string {
 
 func (e *UpdatePackages) Find(c *fi.Context) (*UpdatePackages, error) {
 	return nil, nil
-}
-
-func (e *UpdatePackages) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *UpdatePackages) CheckChanges(a, e, changes *UpdatePackages) error {

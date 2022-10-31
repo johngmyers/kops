@@ -28,6 +28,8 @@ import (
 
 // +kops:fitask
 type Subnet struct {
+	fi.DeltaRun
+
 	ID         *string
 	Name       *string
 	Network    *Network
@@ -109,10 +111,6 @@ func (s *Subnet) Find(context *fi.Context) (*Subnet, error) {
 		return nil, fmt.Errorf("found multiple subnets with name: %s", fi.StringValue(s.Name))
 	}
 	return NewSubnetTaskFromCloud(cloud, s.Lifecycle, &rs[0], s)
-}
-
-func (s *Subnet) Run(context *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(s, context)
 }
 
 func (*Subnet) CheckChanges(a, e, changes *Subnet) error {

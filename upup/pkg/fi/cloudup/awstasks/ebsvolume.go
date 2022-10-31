@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type EBSVolume struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -100,10 +102,6 @@ func (e *EBSVolume) Find(context *fi.Context) (*EBSVolume, error) {
 func (e *EBSVolume) Normalize(c *fi.Context) error {
 	c.Cloud.(awsup.AWSCloud).AddTags(e.Name, e.Tags)
 	return nil
-}
-
-func (e *EBSVolume) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *EBSVolume) CheckChanges(a, e, changes *EBSVolume) error {

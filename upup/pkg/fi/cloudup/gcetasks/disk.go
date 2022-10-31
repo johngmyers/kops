@@ -30,6 +30,8 @@ import (
 // Disk represents a GCE PD
 // +kops:fitask
 type Disk struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -78,10 +80,6 @@ func (e *Disk) URL(project string) string {
 		Name:    *e.Name,
 	}
 	return u.BuildURL()
-}
-
-func (e *Disk) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Disk) CheckChanges(a, e, changes *Disk) error {

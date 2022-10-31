@@ -41,6 +41,8 @@ const (
 )
 
 type File struct {
+	fi.DeltaRun
+
 	AfterFiles      []string    `json:"afterFiles,omitempty"`
 	BeforeServices  []string    `json:"beforeServices,omitempty"`
 	Contents        fi.Resource `json:"contents,omitempty"`
@@ -184,10 +186,6 @@ func (e *File) Find(c *fi.Context) (*File, error) {
 	actual.OnChangeExecute = e.OnChangeExecute
 
 	return actual, nil
-}
-
-func (e *File) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *File) CheckChanges(a, e, changes *File) error {

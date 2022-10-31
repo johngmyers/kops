@@ -33,6 +33,8 @@ import (
 
 // +kops:fitask
 type IAMInstanceProfile struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -93,10 +95,6 @@ func (e *IAMInstanceProfile) Find(c *fi.Context) (*IAMInstanceProfile, error) {
 	actual.Shared = e.Shared
 
 	return actual, nil
-}
-
-func (e *IAMInstanceProfile) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *IAMInstanceProfile) CheckChanges(a, e, changes *IAMInstanceProfile) error {

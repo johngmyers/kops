@@ -28,6 +28,8 @@ import (
 
 // Chattr performs a chattr command, in particular to set a file as immutable
 type Chattr struct {
+	fi.DeltaRun
+
 	File string `json:"file"`
 	Mode string `json:"mode"`
 
@@ -56,10 +58,6 @@ func (e *Chattr) GetDependencies(tasks map[string]fi.Task) []fi.Task {
 func (e *Chattr) Find(c *fi.Context) (*Chattr, error) {
 	// We always re-run the chattr command
 	return nil, nil
-}
-
-func (e *Chattr) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Chattr) CheckChanges(a, e, changes *Chattr) error {

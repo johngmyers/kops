@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type Network struct {
+	fi.DeltaRun
+
 	Name      *string
 	Project   *string
 	Lifecycle fi.Lifecycle
@@ -98,10 +100,6 @@ func (e *Network) URL(project string) string {
 		Global:  true,
 	}
 	return u.BuildURL()
-}
-
-func (e *Network) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Network) CheckChanges(a, e, changes *Network) error {

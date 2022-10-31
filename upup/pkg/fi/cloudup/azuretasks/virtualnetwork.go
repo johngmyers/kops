@@ -30,6 +30,8 @@ import (
 // VirtualNetwork is an Azure Virtual Network.
 // +kops:fitask
 type VirtualNetwork struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -88,11 +90,6 @@ func (n *VirtualNetwork) Find(c *fi.Context) (*VirtualNetwork, error) {
 func (n *VirtualNetwork) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(n.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (n *VirtualNetwork) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(n, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

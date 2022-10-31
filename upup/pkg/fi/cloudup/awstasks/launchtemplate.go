@@ -28,6 +28,8 @@ import (
 // LaunchTemplate defines the specification for a launch template.
 // +kops:fitask
 type LaunchTemplate struct {
+	fi.DeltaRun
+
 	// ID is the launch configuration name
 	ID *string
 	// Name is the name of the configuration
@@ -139,11 +141,6 @@ func (t *LaunchTemplate) buildRootDevice(cloud awsup.AWSCloud) (map[string]*Bloc
 func (t *LaunchTemplate) Normalize(c *fi.Context) error {
 	sort.Stable(OrderSecurityGroupsById(t.SecurityGroups))
 	return nil
-}
-
-// Run is responsible for
-func (t *LaunchTemplate) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(t, c)
 }
 
 // CheckChanges is responsible for ensuring certains fields

@@ -30,6 +30,8 @@ import (
 
 // +kops:fitask
 type InternetGateway struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -119,10 +121,6 @@ func (e *InternetGateway) Find(c *fi.Context) (*InternetGateway, error) {
 	}
 
 	return actual, nil
-}
-
-func (e *InternetGateway) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *InternetGateway) CheckChanges(a, e, changes *InternetGateway) error {

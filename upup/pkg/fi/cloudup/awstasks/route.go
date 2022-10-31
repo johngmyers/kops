@@ -31,6 +31,8 @@ import (
 
 // +kops:fitask
 type Route struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -122,10 +124,6 @@ func (e *Route) Find(c *fi.Context) (*Route, error) {
 	}
 
 	return nil, nil
-}
-
-func (e *Route) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Route) CheckChanges(a, e, changes *Route) error {

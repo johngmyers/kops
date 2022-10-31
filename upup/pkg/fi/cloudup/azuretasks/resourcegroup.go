@@ -29,6 +29,8 @@ import (
 // ResourceGroup is an Azure resource group.
 // +kops:fitask
 type ResourceGroup struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 	Tags      map[string]*string
@@ -78,11 +80,6 @@ func (r *ResourceGroup) Find(c *fi.Context) (*ResourceGroup, error) {
 func (r *ResourceGroup) Normalize(c *fi.Context) error {
 	c.Cloud.(azure.AzureCloud).AddClusterTags(r.Tags)
 	return nil
-}
-
-// Run implements fi.Task.Run.
-func (r *ResourceGroup) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(r, c)
 }
 
 // CheckChanges returns an error if a change is not allowed.

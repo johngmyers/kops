@@ -33,6 +33,8 @@ var scopeAliases map[string]string
 
 // +kops:fitask
 type Instance struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -146,10 +148,6 @@ func (e *Instance) Find(c *fi.Context) (*Instance, error) {
 	}
 
 	return actual, nil
-}
-
-func (e *Instance) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *Instance) CheckChanges(a, e, changes *Instance) error {

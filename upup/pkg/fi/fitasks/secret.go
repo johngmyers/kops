@@ -24,6 +24,8 @@ import (
 
 // +kops:fitask
 type Secret struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 }
@@ -59,10 +61,6 @@ func (e *Secret) Find(c *fi.Context) (*Secret, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *Secret) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *Secret) CheckChanges(a, e, changes *Secret) error {

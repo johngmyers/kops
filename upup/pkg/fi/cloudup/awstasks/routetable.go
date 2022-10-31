@@ -31,6 +31,8 @@ import (
 
 // +kops:fitask
 type RouteTable struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -145,10 +147,6 @@ func findRouteTableByFilters(cloud awsup.AWSCloud, filters []*ec2.Filter) (*ec2.
 	}
 	rt := response.RouteTables[0]
 	return rt, nil
-}
-
-func (e *RouteTable) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *RouteTable) CheckChanges(a, e, changes *RouteTable) error {

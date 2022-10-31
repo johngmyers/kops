@@ -31,6 +31,8 @@ import (
 // BackendService represents a GCE's backend service type, part of a load balancer.
 // +kops:fitask
 type BackendService struct {
+	fi.DeltaRun
+
 	Name                  *string
 	HealthChecks          []*HealthCheck
 	LoadBalancingScheme   *string
@@ -88,10 +90,6 @@ func (e *BackendService) find(cloud gce.GCECloud) (*BackendService, error) {
 	actual.InstanceGroupManagers = igms
 
 	return actual, nil
-}
-
-func (e *BackendService) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (_ *BackendService) CheckChanges(a, e, changes *BackendService) error {

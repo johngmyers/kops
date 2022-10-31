@@ -32,6 +32,8 @@ import (
 
 // +kops:fitask
 type ManagedFile struct {
+	fi.DeltaRun
+
 	Name      *string
 	Lifecycle fi.Lifecycle
 
@@ -103,10 +105,6 @@ func (e *ManagedFile) Find(c *fi.Context) (*ManagedFile, error) {
 	actual.Lifecycle = e.Lifecycle
 
 	return actual, nil
-}
-
-func (e *ManagedFile) Run(c *fi.Context) error {
-	return fi.DefaultDeltaRunMethod(e, c)
 }
 
 func (s *ManagedFile) CheckChanges(a, e, changes *ManagedFile) error {
