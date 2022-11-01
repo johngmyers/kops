@@ -54,7 +54,7 @@ func (e *DHCPOptions) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *DHCPOptions) Find(c *fi.Context) (*DHCPOptions, error) {
+func (e *DHCPOptions) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &ec2.DescribeDhcpOptionsInput{}

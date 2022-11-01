@@ -212,7 +212,7 @@ func (e *ClassicLoadBalancer) getHostedZoneId() *string {
 	return e.HostedZoneId
 }
 
-func (e *ClassicLoadBalancer) Find(c *fi.Context) (*ClassicLoadBalancer, error) {
+func (e *ClassicLoadBalancer) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	lb, err := cloud.FindELBByNameTag(fi.StringValue(e.Name))

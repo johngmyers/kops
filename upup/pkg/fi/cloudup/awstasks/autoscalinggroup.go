@@ -103,7 +103,7 @@ func (e *AutoscalingGroup) CompareWithID() *string {
 }
 
 // Find is used to discover the ASG in the cloud provider
-func (e *AutoscalingGroup) Find(c *fi.Context) (*AutoscalingGroup, error) {
+func (e *AutoscalingGroup) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	g, err := findAutoscalingGroup(cloud, fi.StringValue(e.Name))

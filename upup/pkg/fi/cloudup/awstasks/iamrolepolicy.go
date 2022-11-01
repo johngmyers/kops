@@ -55,7 +55,7 @@ type IAMRolePolicy struct {
 	Managed bool
 }
 
-func (e *IAMRolePolicy) Find(c *fi.Context) (*IAMRolePolicy, error) {
+func (e *IAMRolePolicy) Find(c *fi.Context) (fi.HasFind, error) {
 	var actual IAMRolePolicy
 
 	cloud := c.Cloud.(awsup.AWSCloud)

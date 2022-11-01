@@ -72,7 +72,7 @@ func (a OrderSubnetsById) Less(i, j int) bool {
 	return fi.StringValue(a[i].ID) < fi.StringValue(a[j].ID)
 }
 
-func (e *Subnet) Find(c *fi.Context) (*Subnet, error) {
+func (e *Subnet) Find(c *fi.Context) (fi.HasFind, error) {
 	subnet, err := e.findEc2Subnet(c)
 	if err != nil {
 		return nil, err

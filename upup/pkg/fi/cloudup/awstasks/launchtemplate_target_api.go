@@ -192,7 +192,7 @@ func (t *LaunchTemplate) RenderAWS(c *awsup.AWSAPITarget, a, e, changes *LaunchT
 }
 
 // Find is responsible for finding the launch template for us
-func (t *LaunchTemplate) Find(c *fi.Context) (*LaunchTemplate, error) {
+func (t *LaunchTemplate) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud, ok := c.Cloud.(awsup.AWSCloud)
 	if !ok {
 		return nil, fmt.Errorf("invalid cloud provider: %v, expected: %s", c.Cloud, "awsup.AWSCloud")

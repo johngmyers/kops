@@ -50,7 +50,7 @@ func (eb *EventBridgeRule) CompareWithID() *string {
 	return eb.Name
 }
 
-func (eb *EventBridgeRule) Find(c *fi.Context) (*EventBridgeRule, error) {
+func (eb *EventBridgeRule) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if eb.Name == nil {

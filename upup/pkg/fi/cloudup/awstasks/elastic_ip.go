@@ -62,7 +62,7 @@ func (e *ElasticIP) CompareWithID() *string {
 }
 
 // Find returns the actual ElasticIP state, or nil if not found
-func (e *ElasticIP) Find(context *fi.Context) (*ElasticIP, error) {
+func (e *ElasticIP) Find(context *fi.Context) (fi.HasFind, error) {
 	return e.find(context.Cloud.(awsup.AWSCloud))
 }
 

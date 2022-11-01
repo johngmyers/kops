@@ -51,7 +51,7 @@ func (e *RouteTable) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *RouteTable) Find(c *fi.Context) (*RouteTable, error) {
+func (e *RouteTable) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	var rt *ec2.RouteTable

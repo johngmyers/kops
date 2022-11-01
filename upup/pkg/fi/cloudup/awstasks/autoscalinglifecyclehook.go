@@ -55,7 +55,7 @@ func (h *AutoscalingLifecycleHook) CompareWithID() *string {
 	return h.Name
 }
 
-func (h *AutoscalingLifecycleHook) Find(c *fi.Context) (*AutoscalingLifecycleHook, error) {
+func (h *AutoscalingLifecycleHook) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &autoscaling.DescribeLifecycleHooksInput{

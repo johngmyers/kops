@@ -25,15 +25,20 @@ import (
 
 type DeltaRun struct{}
 
+type HasFind interface {
+	Task
+	Find(c *Context) (HasFind, error)
+}
+
 var _ Task = &DeltaRun{}
 
 func (d *DeltaRun) Run(c *Context) error {
-	return defaultDeltaRunMethod(d, c)
+	panic("should not be called; executor.forkJoin should handle this as a special case")
 }
 
 // defaultDeltaRunMethod implements the standard change-based run procedure:
 // find the existing item; compare properties; call render with (actual, expected, changes)
-func defaultDeltaRunMethod(e Task, c *Context) error {
+func defaultDeltaRunMethod(e HasFind, c *Context) error {
 	var a Task
 	var err error
 

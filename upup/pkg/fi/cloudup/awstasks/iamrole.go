@@ -63,7 +63,7 @@ func (e *IAMRole) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *IAMRole) Find(c *fi.Context) (*IAMRole, error) {
+func (e *IAMRole) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &iam.GetRoleInput{RoleName: e.Name}

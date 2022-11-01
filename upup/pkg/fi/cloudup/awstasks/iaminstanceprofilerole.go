@@ -41,7 +41,7 @@ type IAMInstanceProfileRole struct {
 	Role            *IAMRole
 }
 
-func (e *IAMInstanceProfileRole) Find(c *fi.Context) (*IAMInstanceProfileRole, error) {
+func (e *IAMInstanceProfileRole) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if e.Role == nil || e.Role.ID == nil {

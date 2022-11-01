@@ -68,7 +68,7 @@ func (a OrderSecurityGroupsById) Less(i, j int) bool {
 	return fi.StringValue(a[i].ID) < fi.StringValue(a[j].ID)
 }
 
-func (e *SecurityGroup) Find(c *fi.Context) (*SecurityGroup, error) {
+func (e *SecurityGroup) Find(c *fi.Context) (fi.HasFind, error) {
 	sg, err := e.findEc2(c)
 	if err != nil {
 		return nil, err

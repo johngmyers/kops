@@ -66,7 +66,7 @@ func findInternetGateway(cloud awsup.AWSCloud, request *ec2.DescribeInternetGate
 	return igw, nil
 }
 
-func (e *InternetGateway) Find(c *fi.Context) (*InternetGateway, error) {
+func (e *InternetGateway) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &ec2.DescribeInternetGatewaysInput{}

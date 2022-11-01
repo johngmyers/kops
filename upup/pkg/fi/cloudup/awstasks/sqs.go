@@ -55,7 +55,7 @@ func (q *SQS) CompareWithID() *string {
 	return q.ARN
 }
 
-func (q *SQS) Find(c *fi.Context) (*SQS, error) {
+func (q *SQS) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if q.Name == nil {

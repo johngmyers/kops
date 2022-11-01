@@ -58,7 +58,7 @@ func (e *TargetGroup) CompareWithID() *string {
 	return e.ARN
 }
 
-func (e *TargetGroup) Find(c *fi.Context) (*TargetGroup, error) {
+func (e *TargetGroup) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &elbv2.DescribeTargetGroupsInput{}

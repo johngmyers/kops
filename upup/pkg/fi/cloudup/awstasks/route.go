@@ -50,7 +50,7 @@ type Route struct {
 	VPCPeeringConnectionID    *string
 }
 
-func (e *Route) Find(c *fi.Context) (*Route, error) {
+func (e *Route) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if e.RouteTable == nil || (e.CIDR == nil && e.IPv6CIDR == nil) {

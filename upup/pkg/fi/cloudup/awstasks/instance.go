@@ -64,7 +64,7 @@ func (s *Instance) CompareWithID() *string {
 	return s.ID
 }
 
-func (e *Instance) Find(c *fi.Context) (*Instance, error) {
+func (e *Instance) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 	var request *ec2.DescribeInstancesInput
 

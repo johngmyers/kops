@@ -39,7 +39,7 @@ type VPCDHCPOptionsAssociation struct {
 	DHCPOptions *DHCPOptions
 }
 
-func (e *VPCDHCPOptionsAssociation) Find(c *fi.Context) (*VPCDHCPOptionsAssociation, error) {
+func (e *VPCDHCPOptionsAssociation) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	vpcID := e.VPC.ID

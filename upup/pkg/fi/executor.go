@@ -192,7 +192,11 @@ func (e *executor) forkJoin(tasks []*taskState) []error {
 				}
 			}
 
-			results[index] = ts.task.Run(e.context)
+			if hasFind, ok := ts.task.(HasFind); ok {
+				results[index] = defaultDeltaRunMethod(hasFind, e.context)
+			} else {
+				results[index] = ts.task.Run(e.context)
+			}
 		}(tasks[i], i)
 	}
 

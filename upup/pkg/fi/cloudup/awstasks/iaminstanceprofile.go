@@ -69,7 +69,7 @@ func findIAMInstanceProfile(cloud awsup.AWSCloud, name string) (*iam.InstancePro
 	return response.InstanceProfile, nil
 }
 
-func (e *IAMInstanceProfile) Find(c *fi.Context) (*IAMInstanceProfile, error) {
+func (e *IAMInstanceProfile) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	p, err := findIAMInstanceProfile(cloud, *e.Name)

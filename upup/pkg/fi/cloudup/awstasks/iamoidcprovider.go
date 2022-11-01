@@ -54,7 +54,7 @@ func (e *IAMOIDCProvider) CompareWithID() *string {
 	return e.Name
 }
 
-func (e *IAMOIDCProvider) Find(c *fi.Context) (*IAMOIDCProvider, error) {
+func (e *IAMOIDCProvider) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	response, err := cloud.IAM().ListOpenIDConnectProviders(&iam.ListOpenIDConnectProvidersInput{})

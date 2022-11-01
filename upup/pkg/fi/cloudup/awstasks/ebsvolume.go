@@ -55,7 +55,7 @@ func (e *EBSVolume) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *EBSVolume) Find(context *fi.Context) (*EBSVolume, error) {
+func (e *EBSVolume) Find(context *fi.Context) (fi.HasFind, error) {
 	cloud := context.Cloud.(awsup.AWSCloud)
 
 	filters := cloud.BuildFilters(e.Name)

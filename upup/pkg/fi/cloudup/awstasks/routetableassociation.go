@@ -45,7 +45,7 @@ func (s *RouteTableAssociation) CompareWithID() *string {
 	return s.ID
 }
 
-func (e *RouteTableAssociation) Find(c *fi.Context) (*RouteTableAssociation, error) {
+func (e *RouteTableAssociation) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	routeTableID := e.RouteTable.ID

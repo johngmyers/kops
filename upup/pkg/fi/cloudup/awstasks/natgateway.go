@@ -61,7 +61,7 @@ func (e *NatGateway) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *NatGateway) Find(c *fi.Context) (*NatGateway, error) {
+func (e *NatGateway) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 	var ngw *ec2.NatGateway
 	actual := &NatGateway{}

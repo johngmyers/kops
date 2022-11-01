@@ -69,7 +69,7 @@ func (e *VPC) CompareWithID() *string {
 	return e.ID
 }
 
-func (e *VPC) Find(c *fi.Context) (*VPC, error) {
+func (e *VPC) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	request := &ec2.DescribeVpcsInput{}

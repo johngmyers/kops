@@ -31,13 +31,14 @@ type Secret struct {
 }
 
 var _ fi.HasCheckExisting = &Secret{}
+var _ fi.HasFind = &Secret{}
 
 // It's important always to check for the existing Secret, so we don't regenerate tokens e.g. on terraform
 func (e *Secret) CheckExisting(c *fi.Context) bool {
 	return true
 }
 
-func (e *Secret) Find(c *fi.Context) (*Secret, error) {
+func (e *Secret) Find(c *fi.Context) (fi.HasFind, error) {
 	secrets := c.SecretStore
 
 	name := fi.StringValue(e.Name)

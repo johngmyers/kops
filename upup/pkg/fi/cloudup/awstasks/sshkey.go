@@ -55,7 +55,7 @@ func (e *SSHKey) CompareWithID() *string {
 	return e.Name
 }
 
-func (e *SSHKey) Find(c *fi.Context) (*SSHKey, error) {
+func (e *SSHKey) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	return e.find(cloud)

@@ -54,7 +54,7 @@ type DNSTarget interface {
 	TerraformLink(...string) *terraformWriter.Literal
 }
 
-func (e *DNSName) Find(c *fi.Context) (*DNSName, error) {
+func (e *DNSName) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if e.Zone == nil || e.Zone.ZoneID == nil {

@@ -57,7 +57,7 @@ type SecurityGroupRule struct {
 	Tags map[string]string
 }
 
-func (e *SecurityGroupRule) Find(c *fi.Context) (*SecurityGroupRule, error) {
+func (e *SecurityGroupRule) Find(c *fi.Context) (fi.HasFind, error) {
 	cloud := c.Cloud.(awsup.AWSCloud)
 
 	if e.SecurityGroup == nil || e.SecurityGroup.ID == nil {
