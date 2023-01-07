@@ -41,7 +41,7 @@ type vfsAddonsClient struct {
 
 var _ simple.AddonsClient = &vfsAddonsClient{}
 
-func newAddonsVFS(c *VFSClientset, cluster *kops.Cluster) *vfsAddonsClient {
+func newAddonsVFS(c *VFSSimpleClientset, cluster *kops.Cluster) *vfsAddonsClient {
 	if cluster == nil || cluster.Name == "" {
 		klog.Fatalf("cluster / cluster.Name is required")
 	}

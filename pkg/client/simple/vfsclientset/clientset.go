@@ -33,38 +33,39 @@ import (
 	"k8s.io/kops/util/pkg/vfs"
 )
 
-type VFSClientset struct {
+// VFSSimpleClientset is the VFS implementation of simple.Clientset.
+type VFSSimpleClientset struct {
 	basePath vfs.Path
 }
 
-var _ simple.Clientset = &VFSClientset{}
+var _ simple.Clientset = &VFSSimpleClientset{}
 
-func (c *VFSClientset) clusters() *ClusterVFS {
+func (c *VFSSimpleClientset) clusters() *ClusterVFS {
 	return newClusterVFS(c.basePath)
 }
 
 // GetCluster implements the GetCluster method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) GetCluster(ctx context.Context, name string) (*kops.Cluster, error) {
+func (c *VFSSimpleClientset) GetCluster(ctx context.Context, name string) (*kops.Cluster, error) {
 	return c.clusters().Get(name, metav1.GetOptions{})
 }
 
 // UpdateCluster implements the UpdateCluster method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) UpdateCluster(ctx context.Context, cluster *kops.Cluster, status *kops.ClusterStatus) (*kops.Cluster, error) {
+func (c *VFSSimpleClientset) UpdateCluster(ctx context.Context, cluster *kops.Cluster, status *kops.ClusterStatus) (*kops.Cluster, error) {
 	return c.clusters().Update(cluster, status)
 }
 
 // CreateCluster implements the CreateCluster method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) CreateCluster(ctx context.Context, cluster *kops.Cluster) (*kops.Cluster, error) {
+func (c *VFSSimpleClientset) CreateCluster(ctx context.Context, cluster *kops.Cluster) (*kops.Cluster, error) {
 	return c.clusters().Create(cluster)
 }
 
 // ListClusters implements the ListClusters method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) ListClusters(ctx context.Context, options metav1.ListOptions) (*kops.ClusterList, error) {
+func (c *VFSSimpleClientset) ListClusters(ctx context.Context, options metav1.ListOptions) (*kops.ClusterList, error) {
 	return c.clusters().List(options)
 }
 
 // ConfigBaseFor implements the ConfigBaseFor method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) ConfigBaseFor(cluster *kops.Cluster) (vfs.Path, error) {
+func (c *VFSSimpleClientset) ConfigBaseFor(cluster *kops.Cluster) (vfs.Path, error) {
 	if cluster.Spec.ConfigBase != "" {
 		return vfs.Context.BuildVfsPath(cluster.Spec.ConfigBase)
 	}
@@ -72,15 +73,15 @@ func (c *VFSClientset) ConfigBaseFor(cluster *kops.Cluster) (vfs.Path, error) {
 }
 
 // InstanceGroupsFor implements the InstanceGroupsFor method of simple.Clientset for a VFS-backed state store
-func (c *VFSClientset) InstanceGroupsFor(cluster *kops.Cluster) kopsinternalversion.InstanceGroupInterface {
+func (c *VFSSimpleClientset) InstanceGroupsFor(cluster *kops.Cluster) kopsinternalversion.InstanceGroupInterface {
 	return newInstanceGroupVFS(c, cluster)
 }
 
-func (c *VFSClientset) AddonsFor(cluster *kops.Cluster) simple.AddonsClient {
+func (c *VFSSimpleClientset) AddonsFor(cluster *kops.Cluster) simple.AddonsClient {
 	return newAddonsVFS(c, cluster)
 }
 
-func (c *VFSClientset) SecretStore(cluster *kops.Cluster) (fi.SecretStore, error) {
+func (c *VFSSimpleClientset) SecretStore(cluster *kops.Cluster) (fi.SecretStore, error) {
 	if cluster.Spec.SecretStore == "" {
 		configBase, err := registry.ConfigBase(cluster)
 		if err != nil {
@@ -94,7 +95,7 @@ func (c *VFSClientset) SecretStore(cluster *kops.Cluster) (fi.SecretStore, error
 	}
 }
 
-func (c *VFSClientset) KeyStore(cluster *kops.Cluster) (fi.CAStore, error) {
+func (c *VFSSimpleClientset) KeyStore(cluster *kops.Cluster) (fi.CAStore, error) {
 	basedir, err := pkiPath(cluster)
 	if err != nil {
 		return nil, err
@@ -105,7 +106,7 @@ func (c *VFSClientset) KeyStore(cluster *kops.Cluster) (fi.CAStore, error) {
 	return fi.NewVFSCAStore(cluster, basedir), err
 }
 
-func (c *VFSClientset) SSHCredentialStore(cluster *kops.Cluster) (fi.SSHCredentialStore, error) {
+func (c *VFSSimpleClientset) SSHCredentialStore(cluster *kops.Cluster) (fi.SSHCredentialStore, error) {
 	basedir, err := pkiPath(cluster)
 	if err != nil {
 		return nil, err
@@ -201,7 +202,7 @@ func deleteAllPaths(basePath vfs.Path) error {
 	return nil
 }
 
-func (c *VFSClientset) DeleteCluster(ctx context.Context, cluster *kops.Cluster) error {
+func (c *VFSSimpleClientset) DeleteCluster(ctx context.Context, cluster *kops.Cluster) error {
 	if cluster.Spec.ServiceAccountIssuerDiscovery != nil {
 		discoveryStore := cluster.Spec.ServiceAccountIssuerDiscovery.DiscoveryStore
 		if discoveryStore != "" {
@@ -254,7 +255,7 @@ func (c *VFSClientset) DeleteCluster(ctx context.Context, cluster *kops.Cluster)
 }
 
 func NewVFSClientset(basePath vfs.Path) simple.Clientset {
-	vfsClientset := &VFSClientset{
+	vfsClientset := &VFSSimpleClientset{
 		basePath: basePath,
 	}
 	return vfsClientset

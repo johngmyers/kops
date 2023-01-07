@@ -40,7 +40,7 @@ type InstanceGroupVFS struct {
 	cluster     *kopsapi.Cluster
 }
 
-func newInstanceGroupVFS(c *VFSClientset, cluster *kopsapi.Cluster) *InstanceGroupVFS {
+func newInstanceGroupVFS(c *VFSSimpleClientset, cluster *kopsapi.Cluster) *InstanceGroupVFS {
 	if cluster == nil || cluster.Name == "" {
 		klog.Fatalf("cluster / cluster.Name is required")
 	}
