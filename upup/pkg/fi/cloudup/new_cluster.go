@@ -881,15 +881,9 @@ func setupControlPlane(opt *NewClusterOptions, cluster *api.Cluster, zoneToSubne
 				g.Spec.Zones = []string{zone}
 			}
 
-			if cluster.IsKubernetesGTE("1.22") {
-				if cloudProvider == api.CloudProviderAWS {
-					g.Spec.InstanceMetadata = &api.InstanceMetadataOptions{
-						HTTPPutResponseHopLimit: fi.PtrTo(int64(3)),
-						HTTPTokens:              fi.PtrTo("required"),
-					}
-				}
-				if cluster.IsKubernetesGTE("1.26") && fi.ValueOf(cluster.Spec.IAM.UseServiceAccountExternalPermissions) {
-					g.Spec.InstanceMetadata.HTTPPutResponseHopLimit = fi.PtrTo(int64(1))
+			if cluster.IsKubernetesGTE("1.22") && cluster.IsKubernetesLT("1.26") && cloudProvider == api.CloudProviderAWS {
+				g.Spec.InstanceMetadata = &api.InstanceMetadataOptions{
+					HTTPTokens: fi.PtrTo("required"),
 				}
 			}
 
