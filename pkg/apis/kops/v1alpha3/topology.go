@@ -22,11 +22,11 @@ const (
 )
 
 type TopologySpec struct {
-	// ControlPlane specifies the environment for launching the control plane nodes. (public, private)
-	ControlPlane string `json:"controlPlane,omitempty"`
+	// ControlPlane is unused.
+	ControlPlane string `json:"-"`
 
-	// Nodes specifies the environment for launching the worker nodes. (public, private)
-	Nodes string `json:"nodes,omitempty"`
+	// Nodes is unused.
+	Nodes string `json:"-"`
 
 	// Bastion provide an external facing point of entry into a network
 	// containing private network instances. This host can provide a single

@@ -33,10 +33,10 @@ var SupportedDnsTypes = []DNSType{
 }
 
 type TopologySpec struct {
-	// ControlPlane specifies the environment for launching the control plane nodes. (public, private)
+	// ControlPlane is unused.
 	ControlPlane string `json:"controlPlane,omitempty"`
 
-	// Nodes specifies the environment for launching the worker nodes. (public, private)
+	// Nodes is unused.
 	Nodes string `json:"nodes,omitempty"`
 
 	// Bastion provide an external facing point of entry into a network
