@@ -3,7 +3,6 @@ contents: |
   kind: Pod
   metadata:
     annotations:
-      dns.alpha.kubernetes.io/external: api.minimal.example.com
       dns.alpha.kubernetes.io/internal: api.internal.minimal.example.com
       kubectl.kubernetes.io/default-container: kube-apiserver
     creationTimestamp: null

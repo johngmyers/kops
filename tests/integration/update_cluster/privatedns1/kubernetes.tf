@@ -192,7 +192,6 @@ resource "aws_autoscaling_group" "master-us-test-1a-masters-privatedns1-example-
     id      = aws_launch_template.master-us-test-1a-masters-privatedns1-example-com.id
     version = aws_launch_template.master-us-test-1a-masters-privatedns1-example-com.latest_version
   }
-  load_balancers        = [aws_elb.api-privatedns1-example-com.id]
   max_instance_lifetime = 0
   max_size              = 1
   metrics_granularity   = "1Minute"
@@ -374,36 +373,6 @@ resource "aws_eip" "us-test-1a-privatedns1-example-com" {
     "kubernetes.io/cluster/privatedns1.example.com" = "owned"
   }
   vpc = true
-}
-
-resource "aws_elb" "api-privatedns1-example-com" {
-  connection_draining         = true
-  connection_draining_timeout = 300
-  cross_zone_load_balancing   = false
-  health_check {
-    healthy_threshold   = 2
-    interval            = 10
-    target              = "SSL:443"
-    timeout             = 5
-    unhealthy_threshold = 2
-  }
-  idle_timeout = 300
-  listener {
-    instance_port     = 443
-    instance_protocol = "TCP"
-    lb_port           = 443
-    lb_protocol       = "TCP"
-  }
-  name            = "api-privatedns1-example-c-lq96ht"
-  security_groups = [aws_security_group.api-elb-privatedns1-example-com.id]
-  subnets         = [aws_subnet.utility-us-test-1a-privatedns1-example-com.id]
-  tags = {
-    "KubernetesCluster"                             = "privatedns1.example.com"
-    "Name"                                          = "api.privatedns1.example.com"
-    "Owner"                                         = "John Doe"
-    "foo/bar"                                       = "fib+baz"
-    "kubernetes.io/cluster/privatedns1.example.com" = "owned"
-  }
 }
 
 resource "aws_iam_instance_profile" "bastions-privatedns1-example-com" {
@@ -850,17 +819,6 @@ resource "aws_route" "route-private-us-test-1a-0-0-0-0--0" {
   route_table_id         = aws_route_table.private-us-test-1a-privatedns1-example-com.id
 }
 
-resource "aws_route53_record" "api-privatedns1-example-com" {
-  alias {
-    evaluate_target_health = false
-    name                   = aws_elb.api-privatedns1-example-com.dns_name
-    zone_id                = aws_elb.api-privatedns1-example-com.zone_id
-  }
-  name    = "api.privatedns1.example.com"
-  type    = "A"
-  zone_id = "/hostedzone/Z2AFAKE1ZON3NO"
-}
-
 resource "aws_route53_zone_association" "internal-example-com" {
   vpc_id  = aws_vpc.privatedns1-example-com.id
   zone_id = "/hostedzone/Z2AFAKE1ZON3NO"
@@ -1044,19 +1002,6 @@ resource "aws_s3_object" "privatedns1-example-com-addons-storage-aws-addons-k8s-
   server_side_encryption = "AES256"
 }
 
-resource "aws_security_group" "api-elb-privatedns1-example-com" {
-  description = "Security group for api ELB"
-  name        = "api-elb.privatedns1.example.com"
-  tags = {
-    "KubernetesCluster"                             = "privatedns1.example.com"
-    "Name"                                          = "api-elb.privatedns1.example.com"
-    "Owner"                                         = "John Doe"
-    "foo/bar"                                       = "fib+baz"
-    "kubernetes.io/cluster/privatedns1.example.com" = "owned"
-  }
-  vpc_id = aws_vpc.privatedns1-example-com.id
-}
-
 resource "aws_security_group" "bastion-privatedns1-example-com" {
   description = "Security group for bastion"
   name        = "bastion.privatedns1.example.com"
@@ -1105,11 +1050,11 @@ resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-22to22-bastion-p
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-api-elb-privatedns1-example-com" {
+resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-masters-privatedns1-example-com" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.api-elb-privatedns1-example-com.id
+  security_group_id = aws_security_group.masters-privatedns1-example-com.id
   to_port           = 443
   type              = "ingress"
 }
@@ -1121,24 +1066,6 @@ resource "aws_security_group_rule" "from-172-20-4-0--22-ingress-tcp-22to22-basti
   security_group_id = aws_security_group.bastion-privatedns1-example-com.id
   to_port           = 22
   type              = "ingress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privatedns1-example-com-egress-all-0to0-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privatedns1-example-com.id
-  to_port           = 0
-  type              = "egress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privatedns1-example-com-egress-all-0to0-__--0" {
-  from_port         = 0
-  ipv6_cidr_blocks  = ["::/0"]
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privatedns1-example-com.id
-  to_port           = 0
-  type              = "egress"
 }
 
 resource "aws_security_group_rule" "from-bastion-privatedns1-example-com-egress-all-0to0-0-0-0-0--0" {
@@ -1274,24 +1201,6 @@ resource "aws_security_group_rule" "from-nodes-privatedns1-example-com-ingress-u
   source_security_group_id = aws_security_group.nodes-privatedns1-example-com.id
   to_port                  = 65535
   type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "https-elb-to-master" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.masters-privatedns1-example-com.id
-  source_security_group_id = aws_security_group.api-elb-privatedns1-example-com.id
-  to_port                  = 443
-  type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "icmp-pmtu-api-elb-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 3
-  protocol          = "icmp"
-  security_group_id = aws_security_group.api-elb-privatedns1-example-com.id
-  to_port           = 4
-  type              = "ingress"
 }
 
 resource "aws_security_group_rule" "icmp-pmtu-ssh-nlb-0-0-0-0--0" {

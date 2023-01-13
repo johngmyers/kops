@@ -189,5 +189,3 @@ spec:
   topology:
     dns:
       type: None
-    masters: public
-    nodes: public

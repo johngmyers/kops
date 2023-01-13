@@ -332,13 +332,6 @@ func TestPopulateCluster_CloudProvider_Required(t *testing.T) {
 //	expectErrorFromPopulateCluster(t, c, "Topology")
 //}
 
-func TestPopulateCluster_BastionInvalidMatchingValues_Required(t *testing.T) {
-	// We can't have a bastion with public masters / nodes
-	cloud, c := buildMinimalCluster()
-	c.Spec.Networking.Topology.Bastion = &kopsapi.BastionSpec{}
-	expectErrorFromPopulateCluster(t, c, cloud, "bastion")
-}
-
 func expectErrorFromPopulateCluster(t *testing.T, c *kopsapi.Cluster, cloud fi.Cloud, message string) {
 	ctx := context.TODO()
 	_, err := mockedPopulateClusterSpec(ctx, c, cloud)

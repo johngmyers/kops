@@ -4,10 +4,6 @@ metadata:
   creationTimestamp: "2016-12-12T04:13:14Z"
   name: privatecilium.example.com
 spec:
-  api:
-    loadBalancer:
-      class: Classic
-      type: Public
   authorization:
     alwaysAllow: {}
   certManager:
@@ -240,5 +236,3 @@ spec:
   topology:
     dns:
       type: Public
-    masters: private
-    nodes: private

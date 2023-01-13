@@ -4,8 +4,6 @@ metadata:
   creationTimestamp: "2018-03-20T16:00:27Z"
   name: externallb.example.com
 spec:
-  api:
-    dns: {}
   authorization:
     alwaysAllow: {}
   channel: stable
@@ -203,5 +201,3 @@ spec:
   topology:
     dns:
       type: Public
-    masters: public
-    nodes: public

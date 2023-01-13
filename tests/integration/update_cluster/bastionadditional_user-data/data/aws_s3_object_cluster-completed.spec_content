@@ -4,10 +4,6 @@ metadata:
   creationTimestamp: "2016-12-12T04:13:14Z"
   name: bastionuserdata.example.com
 spec:
-  api:
-    loadBalancer:
-      class: Classic
-      type: Public
   authorization:
     alwaysAllow: {}
   channel: stable
@@ -211,5 +207,3 @@ spec:
       loadBalancer: {}
     dns:
       type: Public
-    masters: private
-    nodes: private

@@ -4,8 +4,6 @@ metadata:
   creationTimestamp: "2016-12-10T22:42:27Z"
   name: minimal.example.com
 spec:
-  api:
-    dns: {}
   authorization:
     alwaysAllow: {}
   channel: stable
@@ -209,5 +207,3 @@ spec:
   topology:
     dns:
       type: Public
-    masters: public
-    nodes: public

@@ -177,7 +177,6 @@ resource "aws_autoscaling_group" "master-us-test-1a-masters-unmanaged-example-co
     id      = aws_launch_template.master-us-test-1a-masters-unmanaged-example-com.id
     version = aws_launch_template.master-us-test-1a-masters-unmanaged-example-com.latest_version
   }
-  load_balancers        = [aws_elb.api-unmanaged-example-com.id]
   max_instance_lifetime = 0
   max_size              = 1
   metrics_granularity   = "1Minute"
@@ -309,34 +308,6 @@ resource "aws_ebs_volume" "us-test-1a-etcd-main-unmanaged-example-com" {
   }
   throughput = 125
   type       = "gp3"
-}
-
-resource "aws_elb" "api-unmanaged-example-com" {
-  connection_draining         = true
-  connection_draining_timeout = 300
-  cross_zone_load_balancing   = false
-  health_check {
-    healthy_threshold   = 2
-    interval            = 10
-    target              = "SSL:443"
-    timeout             = 5
-    unhealthy_threshold = 2
-  }
-  idle_timeout = 300
-  listener {
-    instance_port     = 443
-    instance_protocol = "TCP"
-    lb_port           = 443
-    lb_protocol       = "TCP"
-  }
-  name            = "api-unmanaged-example-com-t82m6f"
-  security_groups = [aws_security_group.api-elb-unmanaged-example-com.id]
-  subnets         = [aws_subnet.utility-us-test-1a-unmanaged-example-com.id, aws_subnet.utility-us-test-1b-unmanaged-example-com.id]
-  tags = {
-    "KubernetesCluster"                           = "unmanaged.example.com"
-    "Name"                                        = "api.unmanaged.example.com"
-    "kubernetes.io/cluster/unmanaged.example.com" = "owned"
-  }
 }
 
 resource "aws_iam_instance_profile" "bastions-unmanaged-example-com" {
@@ -697,17 +668,6 @@ resource "aws_lb_target_group" "bastion-unmanaged-example-d7bn3d" {
   vpc_id = "vpc-12345678"
 }
 
-resource "aws_route53_record" "api-unmanaged-example-com" {
-  alias {
-    evaluate_target_health = false
-    name                   = aws_elb.api-unmanaged-example-com.dns_name
-    zone_id                = aws_elb.api-unmanaged-example-com.zone_id
-  }
-  name    = "api.unmanaged.example.com"
-  type    = "A"
-  zone_id = "/hostedzone/Z1AFAKE1ZON3YO"
-}
-
 resource "aws_s3_object" "cluster-completed-spec" {
   bucket                 = "testingBucket"
   content                = file("${path.module}/data/aws_s3_object_cluster-completed.spec_content")
@@ -852,17 +812,6 @@ resource "aws_s3_object" "unmanaged-example-com-addons-storage-aws-addons-k8s-io
   server_side_encryption = "AES256"
 }
 
-resource "aws_security_group" "api-elb-unmanaged-example-com" {
-  description = "Security group for api ELB"
-  name        = "api-elb.unmanaged.example.com"
-  tags = {
-    "KubernetesCluster"                           = "unmanaged.example.com"
-    "Name"                                        = "api-elb.unmanaged.example.com"
-    "kubernetes.io/cluster/unmanaged.example.com" = "owned"
-  }
-  vpc_id = "vpc-12345678"
-}
-
 resource "aws_security_group" "bastion-unmanaged-example-com" {
   description = "Security group for bastion"
   name        = "bastion.unmanaged.example.com"
@@ -905,11 +854,11 @@ resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-22to22-bastion-u
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-api-elb-unmanaged-example-com" {
+resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-masters-unmanaged-example-com" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.api-elb-unmanaged-example-com.id
+  security_group_id = aws_security_group.masters-unmanaged-example-com.id
   to_port           = 443
   type              = "ingress"
 }
@@ -930,24 +879,6 @@ resource "aws_security_group_rule" "from-172-20-8-0--22-ingress-tcp-22to22-basti
   security_group_id = aws_security_group.bastion-unmanaged-example-com.id
   to_port           = 22
   type              = "ingress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-unmanaged-example-com-egress-all-0to0-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-unmanaged-example-com.id
-  to_port           = 0
-  type              = "egress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-unmanaged-example-com-egress-all-0to0-__--0" {
-  from_port         = 0
-  ipv6_cidr_blocks  = ["::/0"]
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-unmanaged-example-com.id
-  to_port           = 0
-  type              = "egress"
 }
 
 resource "aws_security_group_rule" "from-bastion-unmanaged-example-com-egress-all-0to0-0-0-0-0--0" {
@@ -1083,24 +1014,6 @@ resource "aws_security_group_rule" "from-nodes-unmanaged-example-com-ingress-udp
   source_security_group_id = aws_security_group.nodes-unmanaged-example-com.id
   to_port                  = 65535
   type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "https-elb-to-master" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.masters-unmanaged-example-com.id
-  source_security_group_id = aws_security_group.api-elb-unmanaged-example-com.id
-  to_port                  = 443
-  type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "icmp-pmtu-api-elb-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 3
-  protocol          = "icmp"
-  security_group_id = aws_security_group.api-elb-unmanaged-example-com.id
-  to_port           = 4
-  type              = "ingress"
 }
 
 resource "aws_security_group_rule" "icmp-pmtu-ssh-nlb-0-0-0-0--0" {

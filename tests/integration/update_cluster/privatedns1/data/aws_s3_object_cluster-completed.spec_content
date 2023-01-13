@@ -4,10 +4,6 @@ metadata:
   creationTimestamp: "2016-12-12T04:13:14Z"
   name: privatedns1.example.com
 spec:
-  api:
-    loadBalancer:
-      class: Classic
-      type: Public
   authorization:
     alwaysAllow: {}
   channel: stable
@@ -204,5 +200,3 @@ spec:
   topology:
     dns:
       type: Private
-    masters: private
-    nodes: private

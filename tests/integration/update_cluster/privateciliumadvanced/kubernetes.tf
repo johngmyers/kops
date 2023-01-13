@@ -177,7 +177,6 @@ resource "aws_autoscaling_group" "master-us-test-1a-masters-privateciliumadvance
     id      = aws_launch_template.master-us-test-1a-masters-privateciliumadvanced-example-com.id
     version = aws_launch_template.master-us-test-1a-masters-privateciliumadvanced-example-com.latest_version
   }
-  load_balancers        = [aws_elb.api-privateciliumadvanced-example-com.id]
   max_instance_lifetime = 0
   max_size              = 1
   metrics_granularity   = "1Minute"
@@ -335,34 +334,6 @@ resource "aws_eip" "us-test-1a-privateciliumadvanced-example-com" {
     "kubernetes.io/cluster/privateciliumadvanced.example.com" = "owned"
   }
   vpc = true
-}
-
-resource "aws_elb" "api-privateciliumadvanced-example-com" {
-  connection_draining         = true
-  connection_draining_timeout = 300
-  cross_zone_load_balancing   = false
-  health_check {
-    healthy_threshold   = 2
-    interval            = 10
-    target              = "SSL:443"
-    timeout             = 5
-    unhealthy_threshold = 2
-  }
-  idle_timeout = 300
-  listener {
-    instance_port     = 443
-    instance_protocol = "TCP"
-    lb_port           = 443
-    lb_protocol       = "TCP"
-  }
-  name            = "api-privateciliumadvanced-0cffmm"
-  security_groups = [aws_security_group.api-elb-privateciliumadvanced-example-com.id]
-  subnets         = [aws_subnet.utility-us-test-1a-privateciliumadvanced-example-com.id]
-  tags = {
-    "KubernetesCluster"                                       = "privateciliumadvanced.example.com"
-    "Name"                                                    = "api.privateciliumadvanced.example.com"
-    "kubernetes.io/cluster/privateciliumadvanced.example.com" = "owned"
-  }
 }
 
 resource "aws_iam_instance_profile" "bastions-privateciliumadvanced-example-com" {
@@ -757,17 +728,6 @@ resource "aws_route" "route-private-us-test-1a-0-0-0-0--0" {
   route_table_id         = aws_route_table.private-us-test-1a-privateciliumadvanced-example-com.id
 }
 
-resource "aws_route53_record" "api-privateciliumadvanced-example-com" {
-  alias {
-    evaluate_target_health = false
-    name                   = aws_elb.api-privateciliumadvanced-example-com.dns_name
-    zone_id                = aws_elb.api-privateciliumadvanced-example-com.zone_id
-  }
-  name    = "api.privateciliumadvanced.example.com"
-  type    = "A"
-  zone_id = "/hostedzone/Z1AFAKE1ZON3YO"
-}
-
 resource "aws_route_table" "private-us-test-1a-privateciliumadvanced-example-com" {
   tags = {
     "KubernetesCluster"                                       = "privateciliumadvanced.example.com"
@@ -966,17 +926,6 @@ resource "aws_s3_object" "privateciliumadvanced-example-com-addons-storage-aws-a
   server_side_encryption = "AES256"
 }
 
-resource "aws_security_group" "api-elb-privateciliumadvanced-example-com" {
-  description = "Security group for api ELB"
-  name        = "api-elb.privateciliumadvanced.example.com"
-  tags = {
-    "KubernetesCluster"                                       = "privateciliumadvanced.example.com"
-    "Name"                                                    = "api-elb.privateciliumadvanced.example.com"
-    "kubernetes.io/cluster/privateciliumadvanced.example.com" = "owned"
-  }
-  vpc_id = aws_vpc.privateciliumadvanced-example-com.id
-}
-
 resource "aws_security_group" "bastion-privateciliumadvanced-example-com" {
   description = "Security group for bastion"
   name        = "bastion.privateciliumadvanced.example.com"
@@ -1019,11 +968,11 @@ resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-22to22-bastion-p
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-api-elb-privateciliumadvanced-example-com" {
+resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-masters-privateciliumadvanced-example-com" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.api-elb-privateciliumadvanced-example-com.id
+  security_group_id = aws_security_group.masters-privateciliumadvanced-example-com.id
   to_port           = 443
   type              = "ingress"
 }
@@ -1035,24 +984,6 @@ resource "aws_security_group_rule" "from-172-20-4-0--22-ingress-tcp-22to22-basti
   security_group_id = aws_security_group.bastion-privateciliumadvanced-example-com.id
   to_port           = 22
   type              = "ingress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privateciliumadvanced-example-com-egress-all-0to0-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privateciliumadvanced-example-com.id
-  to_port           = 0
-  type              = "egress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privateciliumadvanced-example-com-egress-all-0to0-__--0" {
-  from_port         = 0
-  ipv6_cidr_blocks  = ["::/0"]
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privateciliumadvanced-example-com.id
-  to_port           = 0
-  type              = "egress"
 }
 
 resource "aws_security_group_rule" "from-bastion-privateciliumadvanced-example-com-egress-all-0to0-0-0-0-0--0" {
@@ -1188,24 +1119,6 @@ resource "aws_security_group_rule" "from-nodes-privateciliumadvanced-example-com
   source_security_group_id = aws_security_group.nodes-privateciliumadvanced-example-com.id
   to_port                  = 65535
   type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "https-elb-to-master" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.masters-privateciliumadvanced-example-com.id
-  source_security_group_id = aws_security_group.api-elb-privateciliumadvanced-example-com.id
-  to_port                  = 443
-  type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "icmp-pmtu-api-elb-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 3
-  protocol          = "icmp"
-  security_group_id = aws_security_group.api-elb-privateciliumadvanced-example-com.id
-  to_port           = 4
-  type              = "ingress"
 }
 
 resource "aws_security_group_rule" "icmp-pmtu-ssh-nlb-0-0-0-0--0" {

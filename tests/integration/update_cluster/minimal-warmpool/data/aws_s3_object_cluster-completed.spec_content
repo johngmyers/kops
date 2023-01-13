@@ -4,8 +4,6 @@ metadata:
   creationTimestamp: "2016-12-10T22:42:27Z"
   name: minimal-warmpool.example.com
 spec:
-  api:
-    dns: {}
   authorization:
     alwaysAllow: {}
   channel: stable
@@ -231,8 +229,6 @@ spec:
   topology:
     dns:
       type: Public
-    masters: public
-    nodes: public
   warmPool:
     enableLifecycleHook: true
     maxSize: 1

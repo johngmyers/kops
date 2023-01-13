@@ -177,7 +177,6 @@ resource "aws_autoscaling_group" "master-us-test-1a-masters-privatecalico-exampl
     id      = aws_launch_template.master-us-test-1a-masters-privatecalico-example-com.id
     version = aws_launch_template.master-us-test-1a-masters-privatecalico-example-com.latest_version
   }
-  load_balancers        = [aws_elb.api-privatecalico-example-com.id]
   max_instance_lifetime = 0
   max_size              = 1
   metrics_granularity   = "1Minute"
@@ -318,34 +317,6 @@ resource "aws_eip" "us-test-1a-privatecalico-example-com" {
     "kubernetes.io/cluster/privatecalico.example.com" = "owned"
   }
   vpc = true
-}
-
-resource "aws_elb" "api-privatecalico-example-com" {
-  connection_draining         = true
-  connection_draining_timeout = 300
-  cross_zone_load_balancing   = false
-  health_check {
-    healthy_threshold   = 2
-    interval            = 10
-    target              = "SSL:443"
-    timeout             = 5
-    unhealthy_threshold = 2
-  }
-  idle_timeout = 300
-  listener {
-    instance_port     = 443
-    instance_protocol = "TCP"
-    lb_port           = 443
-    lb_protocol       = "TCP"
-  }
-  name            = "api-privatecalico-example-0uch4k"
-  security_groups = [aws_security_group.api-elb-privatecalico-example-com.id]
-  subnets         = [aws_subnet.utility-us-test-1a-privatecalico-example-com.id]
-  tags = {
-    "KubernetesCluster"                               = "privatecalico.example.com"
-    "Name"                                            = "api.privatecalico.example.com"
-    "kubernetes.io/cluster/privatecalico.example.com" = "owned"
-  }
 }
 
 resource "aws_iam_instance_profile" "bastions-privatecalico-example-com" {
@@ -736,17 +707,6 @@ resource "aws_route" "route-private-us-test-1a-0-0-0-0--0" {
   route_table_id         = aws_route_table.private-us-test-1a-privatecalico-example-com.id
 }
 
-resource "aws_route53_record" "api-privatecalico-example-com" {
-  alias {
-    evaluate_target_health = false
-    name                   = aws_elb.api-privatecalico-example-com.dns_name
-    zone_id                = aws_elb.api-privatecalico-example-com.zone_id
-  }
-  name    = "api.privatecalico.example.com"
-  type    = "A"
-  zone_id = "/hostedzone/Z1AFAKE1ZON3YO"
-}
-
 resource "aws_route_table" "private-us-test-1a-privatecalico-example-com" {
   tags = {
     "KubernetesCluster"                               = "privatecalico.example.com"
@@ -937,17 +897,6 @@ resource "aws_s3_object" "privatecalico-example-com-addons-storage-aws-addons-k8
   server_side_encryption = "AES256"
 }
 
-resource "aws_security_group" "api-elb-privatecalico-example-com" {
-  description = "Security group for api ELB"
-  name        = "api-elb.privatecalico.example.com"
-  tags = {
-    "KubernetesCluster"                               = "privatecalico.example.com"
-    "Name"                                            = "api-elb.privatecalico.example.com"
-    "kubernetes.io/cluster/privatecalico.example.com" = "owned"
-  }
-  vpc_id = aws_vpc.privatecalico-example-com.id
-}
-
 resource "aws_security_group" "bastion-privatecalico-example-com" {
   description = "Security group for bastion"
   name        = "bastion.privatecalico.example.com"
@@ -990,11 +939,11 @@ resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-22to22-bastion-p
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-api-elb-privatecalico-example-com" {
+resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-masters-privatecalico-example-com" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
+  security_group_id = aws_security_group.masters-privatecalico-example-com.id
   to_port           = 443
   type              = "ingress"
 }
@@ -1017,31 +966,13 @@ resource "aws_security_group_rule" "from-__--0-ingress-tcp-22to22-bastion-privat
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "from-__--0-ingress-tcp-443to443-api-elb-privatecalico-example-com" {
+resource "aws_security_group_rule" "from-__--0-ingress-tcp-443to443-masters-privatecalico-example-com" {
   from_port         = 443
   ipv6_cidr_blocks  = ["::/0"]
   protocol          = "tcp"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
+  security_group_id = aws_security_group.masters-privatecalico-example-com.id
   to_port           = 443
   type              = "ingress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privatecalico-example-com-egress-all-0to0-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
-  to_port           = 0
-  type              = "egress"
-}
-
-resource "aws_security_group_rule" "from-api-elb-privatecalico-example-com-egress-all-0to0-__--0" {
-  from_port         = 0
-  ipv6_cidr_blocks  = ["::/0"]
-  protocol          = "-1"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
-  to_port           = 0
-  type              = "egress"
 }
 
 resource "aws_security_group_rule" "from-bastion-privatecalico-example-com-egress-all-0to0-0-0-0-0--0" {
@@ -1188,24 +1119,6 @@ resource "aws_security_group_rule" "from-nodes-privatecalico-example-com-ingress
   type                     = "ingress"
 }
 
-resource "aws_security_group_rule" "https-elb-to-master" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.masters-privatecalico-example-com.id
-  source_security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
-  to_port                  = 443
-  type                     = "ingress"
-}
-
-resource "aws_security_group_rule" "icmp-pmtu-api-elb-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 3
-  protocol          = "icmp"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
-  to_port           = 4
-  type              = "ingress"
-}
-
 resource "aws_security_group_rule" "icmp-pmtu-ssh-nlb-0-0-0-0--0" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 3
@@ -1221,15 +1134,6 @@ resource "aws_security_group_rule" "icmp-pmtu-ssh-nlb-172-20-4-0--22" {
   protocol          = "icmp"
   security_group_id = aws_security_group.bastion-privatecalico-example-com.id
   to_port           = 4
-  type              = "ingress"
-}
-
-resource "aws_security_group_rule" "icmpv6-pmtu-api-elb-__--0" {
-  from_port         = -1
-  ipv6_cidr_blocks  = ["::/0"]
-  protocol          = "icmpv6"
-  security_group_id = aws_security_group.api-elb-privatecalico-example-com.id
-  to_port           = -1
   type              = "ingress"
 }
 
