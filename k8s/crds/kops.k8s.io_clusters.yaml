@@ -5651,12 +5651,10 @@ spec:
                         type: string
                     type: object
                   masters:
-                    description: The environment to launch the Kubernetes masters
-                      in public|private
+                    description: ControlPlane is unused.
                     type: string
                   nodes:
-                    description: The environment to launch the Kubernetes nodes in
-                      public|private
+                    description: Nodes is unused.
                     type: string
                 type: object
               updatePolicy:
