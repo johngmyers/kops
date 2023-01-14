@@ -47,7 +47,7 @@ func BuildMinimalCluster(clusterName string) *kops.Cluster {
 		DNS:          kops.DNSTypePublic,
 	}
 
-	c.Spec.Networking.NetworkCIDR = "172.20.0.0/16"
+	c.Spec.Networking.NetworkCIDRs = []string{"172.20.0.0/16"}
 	c.Spec.Networking.Subnets = []kops.ClusterSubnetSpec{
 		{Name: "subnet-us-test-1a", Zone: "us-test-1a", CIDR: "172.20.1.0/24", Type: kops.SubnetTypePublic},
 		{Name: "subnet-us-test-1b", Zone: "us-test-1b", CIDR: "172.20.2.0/24", Type: kops.SubnetTypePublic},

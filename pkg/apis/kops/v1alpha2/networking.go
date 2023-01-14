@@ -22,17 +22,16 @@ import (
 
 // NetworkingSpec allows selection and configuration of a networking plugin
 type NetworkingSpec struct {
-	NetworkID              string              `json:"-"`
-	NetworkCIDR            string              `json:"-"`
-	AdditionalNetworkCIDRs []string            `json:"-"`
-	Subnets                []ClusterSubnetSpec `json:"-"`
-	TagSubnets             *bool               `json:"-"`
-	Topology               *TopologySpec       `json:"-"`
-	EgressProxy            *EgressProxySpec    `json:"-"`
-	NonMasqueradeCIDR      string              `json:"-"`
-	PodCIDR                string              `json:"-"`
-	ServiceClusterIPRange  string              `json:"-"`
-	IsolateControlPlane    *bool               `json:"-"`
+	NetworkID             string              `json:"-"`
+	NetworkCIDRs          []string            `json:"-"`
+	Subnets               []ClusterSubnetSpec `json:"-"`
+	TagSubnets            *bool               `json:"-"`
+	Topology              *TopologySpec       `json:"-"`
+	EgressProxy           *EgressProxySpec    `json:"-"`
+	NonMasqueradeCIDR     string              `json:"-"`
+	PodCIDR               string              `json:"-"`
+	ServiceClusterIPRange string              `json:"-"`
+	IsolateControlPlane   *bool               `json:"-"`
 
 	Classic    *ClassicNetworkingSpec    `json:"classic,omitempty"`
 	Kubenet    *KubenetNetworkingSpec    `json:"kubenet,omitempty"`

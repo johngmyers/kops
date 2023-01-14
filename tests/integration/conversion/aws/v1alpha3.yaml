@@ -73,14 +73,14 @@ spec:
   iam: {}
   kubernetesVersion: v1.21.0
   networking:
-    additionalNetworkCIDRs:
-    - 172.21.0.0/16
     amazonVPC: {}
     egressProxy:
       httpProxy:
         host: egress-proxy.invalid
     isolateControlPlane: true
-    networkCIDR: 172.20.0.0/16
+    networkCIDRs:
+    - 172.20.0.0/16
+    - 172.21.0.0/16
     networkID: vpc-123456
     nonMasqueradeCIDR: 100.64.0.0/10
     podCIDR: 100.64.0.0/16

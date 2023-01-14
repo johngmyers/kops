@@ -1575,7 +1575,7 @@ the removal of fields no longer in use.
 
 | v1alpha2 Field                                         | New Field                                                      |
 |--------------------------------------------------------|----------------------------------------------------------------|
-| additionalNetworkCIDRs                                 | networking.additionalNetworkCIDRs                              |
+| additionalNetworkCIDRs                                 | networking.networkCIDRs[1:]                                    |
 | additionalSans                                         | api.additionalSANs                                             |
 | api.loadBalancer.subnets.allocationId                  | api.loadBalancer.subnets.allocationID                          |
 | api.loadBalancer.useForInternalApi                     | api.loadBalancer.useForInternalAPI                             |
@@ -1615,7 +1615,7 @@ the removal of fields no longer in use.
 | masterKubelet.authenticationTokenWebhookCacheTtl       | controlPlaneKubelet.authenticationTokenWebhookCacheTTL         |
 | masterKubelet.clientCaFile                             | controlPlaneKubelet.clientCAFile                               |
 | masterPublicName                                       | api.publicName                                                 |
-| networkCIDR                                            | networking.networkCIDR                                         |
+| networkCIDR                                            | networking.networkCIDRs[0]                                     |
 | networkID                                              | networking.networkID                                           |
 | networking.amazonvpc                                   | networking.amazonVPC                                           |
 | networking.amazonvpc.imageName                         | networking.amazonVPC.image                                     |

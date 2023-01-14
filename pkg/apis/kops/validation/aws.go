@@ -66,7 +66,8 @@ func awsValidateCluster(c *kops.Cluster) field.ErrorList {
 			} else if subnet.Type != kops.SubnetTypePrivate {
 				allErrs = append(allErrs, field.Invalid(f, subnet, "additional routes can only be added on private subnets"))
 			}
-			allErrs = append(allErrs, awsValidateAdditionalRoutes(f.Child("additionalRoutes"), subnet.AdditionalRoutes, c.Spec.Networking.NetworkCIDR)...)
+			// TODO allow for more than just the primary network CIDR
+			allErrs = append(allErrs, awsValidateAdditionalRoutes(f.Child("additionalRoutes"), subnet.AdditionalRoutes, c.Spec.Networking.NetworkCIDRs[0])...)
 		}
 	}
 

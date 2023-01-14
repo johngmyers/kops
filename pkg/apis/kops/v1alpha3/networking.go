@@ -27,14 +27,10 @@ type NetworkingSpec struct {
 	// NetworkID is the cloud provider's identifier of the existing network (for example, AWS VPC) the cluster should use.
 	// If not specified, kOps will create a new network.
 	NetworkID string `json:"networkID,omitempty"`
-	// NetworkCIDR is the primary IPv4 CIDR used for the cloud provider's network.
-	// It is not required on GCE.
+	// NetworkCIDRs are the IPv4 CIDRs used for the cloud provider's network.
+	// They are not required on GCE.
 	// On DO, it maps to the VPC CIDR.
-	NetworkCIDR string `json:"networkCIDR,omitempty"`
-	// AdditionalNetworkCIDRs is a list of additional CIDR used for the AWS VPC
-	// or otherwise allocated to k8s. This is a real CIDR, not the internal k8s network
-	// On AWS, it maps to any additional CIDRs added to a VPC.
-	AdditionalNetworkCIDRs []string `json:"additionalNetworkCIDRs,omitempty"`
+	NetworkCIDRs []string `json:"networkCIDRs,omitempty"`
 
 	// Subnets are the subnets that the cluster can use.
 	Subnets []ClusterSubnetSpec `json:"subnets,omitempty"`

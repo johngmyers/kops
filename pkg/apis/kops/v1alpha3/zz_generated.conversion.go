@@ -6141,8 +6141,7 @@ func Convert_kops_NTPConfig_To_v1alpha3_NTPConfig(in *kops.NTPConfig, out *NTPCo
 
 func autoConvert_v1alpha3_NetworkingSpec_To_kops_NetworkingSpec(in *NetworkingSpec, out *kops.NetworkingSpec, s conversion.Scope) error {
 	out.NetworkID = in.NetworkID
-	out.NetworkCIDR = in.NetworkCIDR
-	out.AdditionalNetworkCIDRs = in.AdditionalNetworkCIDRs
+	out.NetworkCIDRs = in.NetworkCIDRs
 	if in.Subnets != nil {
 		in, out := &in.Subnets, &out.Subnets
 		*out = make([]kops.ClusterSubnetSpec, len(*in))
@@ -6298,8 +6297,7 @@ func Convert_v1alpha3_NetworkingSpec_To_kops_NetworkingSpec(in *NetworkingSpec, 
 
 func autoConvert_kops_NetworkingSpec_To_v1alpha3_NetworkingSpec(in *kops.NetworkingSpec, out *NetworkingSpec, s conversion.Scope) error {
 	out.NetworkID = in.NetworkID
-	out.NetworkCIDR = in.NetworkCIDR
-	out.AdditionalNetworkCIDRs = in.AdditionalNetworkCIDRs
+	out.NetworkCIDRs = in.NetworkCIDRs
 	if in.Subnets != nil {
 		in, out := &in.Subnets, &out.Subnets
 		*out = make([]ClusterSubnetSpec, len(*in))

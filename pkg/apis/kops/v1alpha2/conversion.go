@@ -274,8 +274,9 @@ func Convert_v1alpha2_ClusterSpec_To_kops_ClusterSpec(in *ClusterSpec, out *kops
 		out.Networking.Subnets = nil
 	}
 	out.API.PublicName = in.MasterPublicName
-	out.Networking.NetworkCIDR = in.NetworkCIDR
-	out.Networking.AdditionalNetworkCIDRs = in.AdditionalNetworkCIDRs
+	if in.NetworkCIDR != "" {
+		out.Networking.NetworkCIDRs = append([]string{in.NetworkCIDR}, in.AdditionalNetworkCIDRs...)
+	}
 	out.Networking.NetworkID = in.NetworkID
 	if in.Topology != nil {
 		in, out := &in.Topology, &out.Networking.Topology
@@ -486,8 +487,12 @@ func Convert_kops_ClusterSpec_To_v1alpha2_ClusterSpec(in *kops.ClusterSpec, out 
 	} else {
 		out.Subnets = nil
 	}
-	out.NetworkCIDR = in.Networking.NetworkCIDR
-	out.AdditionalNetworkCIDRs = in.Networking.AdditionalNetworkCIDRs
+	if len(in.Networking.NetworkCIDRs) > 0 {
+		out.NetworkCIDR = in.Networking.NetworkCIDRs[0]
+		if len(in.Networking.NetworkCIDRs) > 1 {
+			out.AdditionalNetworkCIDRs = in.Networking.NetworkCIDRs[1:]
+		}
+	}
 	out.NetworkID = in.Networking.NetworkID
 	if in.Networking.Topology != nil {
 		in, out := &in.Networking.Topology, &out.Topology

@@ -49,7 +49,8 @@ spec:
   kubernetesVersion: v1.21.0
   networking:
     kubenet: {}
-    networkCIDR: 172.20.0.0/16
+    networkCIDRs:
+    - 172.20.0.0/16
     nonMasqueradeCIDR: 100.64.0.0/10
     subnets:
     - cidr: 172.20.32.0/19
