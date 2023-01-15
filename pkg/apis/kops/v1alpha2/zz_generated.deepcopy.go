@@ -2256,6 +2256,28 @@ func (in *IAMSpec) DeepCopyInto(out *IAMSpec) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.InstanceGroupRoleExternalPolicies != nil {
+		in, out := &in.InstanceGroupRoleExternalPolicies, &out.InstanceGroupRoleExternalPolicies
+		*out = make(map[InstanceGroupRole][]string, len(*in))
+		for key, val := range *in {
+			var outVal []string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				in, out := &val, &outVal
+				*out = make([]string, len(*in))
+				copy(*out, *in)
+			}
+			(*out)[key] = outVal
+		}
+	}
+	if in.InstanceGroupRoleAdditionalPolicies != nil {
+		in, out := &in.InstanceGroupRoleAdditionalPolicies, &out.InstanceGroupRoleAdditionalPolicies
+		*out = make(map[InstanceGroupRole]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	if in.UseServiceAccountExternalPermissions != nil {
 		in, out := &in.UseServiceAccountExternalPermissions, &out.UseServiceAccountExternalPermissions
 		*out = new(bool)

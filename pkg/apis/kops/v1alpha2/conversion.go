@@ -78,24 +78,49 @@ func Convert_v1alpha2_ClusterSpec_To_kops_ClusterSpec(in *ClusterSpec, out *kops
 	if err := autoConvert_v1alpha2_ClusterSpec_To_kops_ClusterSpec(in, out, s); err != nil {
 		return err
 	}
-	if in.AdditionalPolicies != nil {
-		out.AdditionalPolicies = make(map[string]string, len(in.AdditionalPolicies))
+	if in.ExternalPolicies != nil {
+		if out.IAM == nil {
+			out.IAM = &kops.IAMSpec{}
+		}
+		out.IAM.InstanceGroupRoleExternalPolicies = make(map[kops.InstanceGroupRole][]string, len(in.ExternalPolicies))
 		for k, v := range in.AdditionalPolicies {
-			if k == "master" {
-				k = "control-plane"
+			var roleKey kops.InstanceGroupRole
+			switch k {
+			case "apiserver":
+				roleKey = kops.InstanceGroupRoleAPIServer
+			case "bastion":
+				roleKey = kops.InstanceGroupRoleBastion
+			case "master":
+				roleKey = kops.InstanceGroupRoleControlPlane
+			case "node":
+				roleKey = kops.InstanceGroupRoleNode
+			default:
+				return field.NotSupported(field.NewPath("spec", "additionalPolicies"), k, []string{"apiserver", "bastion", "master", "node"})
 			}
-			out.AdditionalPolicies[k] = v
+			out.IAM.InstanceGroupRoleAdditionalPolicies[roleKey] = v
 		}
 	}
-	if in.ExternalPolicies != nil {
-		policies := make(map[string][]string, len(in.ExternalPolicies))
-		for k, v := range in.ExternalPolicies {
-			if k == "master" {
-				k = "control-plane"
-			}
-			policies[k] = v
+	if in.AdditionalPolicies != nil {
+		if out.IAM == nil {
+			out.IAM = &kops.IAMSpec{}
 		}
-		out.ExternalPolicies = policies
+		out.IAM.InstanceGroupRoleAdditionalPolicies = make(map[kops.InstanceGroupRole]string, len(in.AdditionalPolicies))
+		for k, v := range in.AdditionalPolicies {
+			var roleKey kops.InstanceGroupRole
+			switch k {
+			case "apiserver":
+				roleKey = kops.InstanceGroupRoleAPIServer
+			case "bastion":
+				roleKey = kops.InstanceGroupRoleBastion
+			case "master":
+				roleKey = kops.InstanceGroupRoleControlPlane
+			case "node":
+				roleKey = kops.InstanceGroupRoleNode
+			default:
+				return field.NotSupported(field.NewPath("spec", "additionalPolicies"), k, []string{"apiserver", "bastion", "master", "node"})
+			}
+			out.IAM.InstanceGroupRoleAdditionalPolicies[roleKey] = v
+		}
 	}
 	if in.KubeAPIServer != nil {
 		kube := in.KubeAPIServer
@@ -352,15 +377,6 @@ func Convert_kops_ClusterSpec_To_v1alpha2_ClusterSpec(in *kops.ClusterSpec, out 
 	if err := autoConvert_kops_ClusterSpec_To_v1alpha2_ClusterSpec(in, out, s); err != nil {
 		return err
 	}
-	if in.AdditionalPolicies != nil {
-		out.AdditionalPolicies = make(map[string]string, len(in.AdditionalPolicies))
-		for k, v := range in.AdditionalPolicies {
-			if k == "control-plane" {
-				k = "master"
-			}
-			out.AdditionalPolicies[k] = v
-		}
-	}
 	if in.Authentication != nil && in.Authentication.OIDC != nil {
 		if out.KubeAPIServer == nil {
 			out.KubeAPIServer = &KubeAPIServerConfig{}
@@ -383,15 +399,6 @@ func Convert_kops_ClusterSpec_To_v1alpha2_ClusterSpec(in *kops.ClusterSpec, out 
 		}
 		kube.OIDCUsernameClaim = oidc.UsernameClaim
 		kube.OIDCUsernamePrefix = oidc.UsernamePrefix
-	}
-	if in.ExternalPolicies != nil {
-		out.ExternalPolicies = make(map[string][]string, len(in.ExternalPolicies))
-		for k, v := range in.ExternalPolicies {
-			if k == "control-plane" {
-				k = "master"
-			}
-			out.ExternalPolicies[k] = v
-		}
 	}
 	out.LegacyNetworking = &NetworkingSpec{}
 	if err := autoConvert_kops_NetworkingSpec_To_v1alpha2_NetworkingSpec(&in.Networking, out.LegacyNetworking, s); err != nil {
@@ -586,6 +593,29 @@ func Convert_kops_ClusterSpec_To_v1alpha2_ClusterSpec(in *kops.ClusterSpec, out 
 	out.MasterPublicName = in.API.PublicName
 	out.AdditionalSANs = in.API.AdditionalSANs
 	out.KubernetesAPIAccess = in.API.Access
+	if in.IAM != nil {
+		if in.IAM.InstanceGroupRoleAdditionalPolicies != nil {
+			out.AdditionalPolicies = make(map[string]string, len(in.IAM.InstanceGroupRoleAdditionalPolicies))
+			for k, v := range in.IAM.InstanceGroupRoleAdditionalPolicies {
+				roleKey := strings.ToLower(string(k))
+				if k == kops.InstanceGroupRoleControlPlane {
+					roleKey = "master"
+				}
+				out.AdditionalPolicies[roleKey] = v
+			}
+		}
+		if in.IAM.InstanceGroupRoleExternalPolicies != nil {
+			out.ExternalPolicies = make(map[string][]string, len(in.IAM.InstanceGroupRoleExternalPolicies))
+			for k, v := range in.IAM.InstanceGroupRoleExternalPolicies {
+				roleKey := strings.ToLower(string(k))
+				if k == kops.InstanceGroupRoleControlPlane {
+					roleKey = "master"
+				}
+				out.ExternalPolicies[roleKey] = v
+			}
+		}
+
+	}
 	return nil
 }
 

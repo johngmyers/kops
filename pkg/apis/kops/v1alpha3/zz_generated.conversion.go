@@ -2599,8 +2599,6 @@ func autoConvert_v1alpha3_ClusterSpec_To_kops_ClusterSpec(in *ClusterSpec, out *
 	out.NodePortAccess = in.NodePortAccess
 	out.SSHKeyName = in.SSHKeyName
 	out.UpdatePolicy = in.UpdatePolicy
-	out.ExternalPolicies = in.ExternalPolicies
-	out.AdditionalPolicies = in.AdditionalPolicies
 	if in.FileAssets != nil {
 		in, out := &in.FileAssets, &out.FileAssets
 		*out = make([]kops.FileAssetSpec, len(*in))
@@ -2933,8 +2931,6 @@ func autoConvert_kops_ClusterSpec_To_v1alpha3_ClusterSpec(in *kops.ClusterSpec, 
 	out.NodePortAccess = in.NodePortAccess
 	out.SSHKeyName = in.SSHKeyName
 	out.UpdatePolicy = in.UpdatePolicy
-	out.ExternalPolicies = in.ExternalPolicies
-	out.AdditionalPolicies = in.AdditionalPolicies
 	if in.FileAssets != nil {
 		in, out := &in.FileAssets, &out.FileAssets
 		*out = make([]FileAssetSpec, len(*in))
@@ -4283,6 +4279,16 @@ func autoConvert_v1alpha3_IAMSpec_To_kops_IAMSpec(in *IAMSpec, out *kops.IAMSpec
 	out.Legacy = in.Legacy
 	out.AllowContainerRegistry = in.AllowContainerRegistry
 	out.PermissionsBoundary = in.PermissionsBoundary
+	out.InstanceGroupRoleExternalPolicies = in.InstanceGroupRoleExternalPolicies
+	if in.InstanceGroupRoleAdditionalPolicies != nil {
+		in, out := &in.InstanceGroupRoleAdditionalPolicies, &out.InstanceGroupRoleAdditionalPolicies
+		*out = make(map[kops.InstanceGroupRole]string, len(*in))
+		for key, val := range *in {
+			(*out)[kops.InstanceGroupRole(key)] = val
+		}
+	} else {
+		out.InstanceGroupRoleAdditionalPolicies = nil
+	}
 	out.UseServiceAccountExternalPermissions = in.UseServiceAccountExternalPermissions
 	if in.ServiceAccountExternalPermissions != nil {
 		in, out := &in.ServiceAccountExternalPermissions, &out.ServiceAccountExternalPermissions
@@ -4307,6 +4313,16 @@ func autoConvert_kops_IAMSpec_To_v1alpha3_IAMSpec(in *kops.IAMSpec, out *IAMSpec
 	out.Legacy = in.Legacy
 	out.AllowContainerRegistry = in.AllowContainerRegistry
 	out.PermissionsBoundary = in.PermissionsBoundary
+	out.InstanceGroupRoleExternalPolicies = in.InstanceGroupRoleExternalPolicies
+	if in.InstanceGroupRoleAdditionalPolicies != nil {
+		in, out := &in.InstanceGroupRoleAdditionalPolicies, &out.InstanceGroupRoleAdditionalPolicies
+		*out = make(map[InstanceGroupRole]string, len(*in))
+		for key, val := range *in {
+			(*out)[InstanceGroupRole(key)] = val
+		}
+	} else {
+		out.InstanceGroupRoleAdditionalPolicies = nil
+	}
 	out.UseServiceAccountExternalPermissions = in.UseServiceAccountExternalPermissions
 	if in.ServiceAccountExternalPermissions != nil {
 		in, out := &in.ServiceAccountExternalPermissions, &out.ServiceAccountExternalPermissions

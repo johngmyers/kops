@@ -999,28 +999,6 @@ func (in *ClusterSpec) DeepCopyInto(out *ClusterSpec) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.ExternalPolicies != nil {
-		in, out := &in.ExternalPolicies, &out.ExternalPolicies
-		*out = make(map[string][]string, len(*in))
-		for key, val := range *in {
-			var outVal []string
-			if val == nil {
-				(*out)[key] = nil
-			} else {
-				in, out := &val, &outVal
-				*out = make([]string, len(*in))
-				copy(*out, *in)
-			}
-			(*out)[key] = outVal
-		}
-	}
-	if in.AdditionalPolicies != nil {
-		in, out := &in.AdditionalPolicies, &out.AdditionalPolicies
-		*out = make(map[string]string, len(*in))
-		for key, val := range *in {
-			(*out)[key] = val
-		}
-	}
 	if in.FileAssets != nil {
 		in, out := &in.FileAssets, &out.FileAssets
 		*out = make([]FileAssetSpec, len(*in))
@@ -2192,6 +2170,28 @@ func (in *IAMSpec) DeepCopyInto(out *IAMSpec) {
 		in, out := &in.PermissionsBoundary, &out.PermissionsBoundary
 		*out = new(string)
 		**out = **in
+	}
+	if in.InstanceGroupRoleExternalPolicies != nil {
+		in, out := &in.InstanceGroupRoleExternalPolicies, &out.InstanceGroupRoleExternalPolicies
+		*out = make(map[kops.InstanceGroupRole][]string, len(*in))
+		for key, val := range *in {
+			var outVal []string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				in, out := &val, &outVal
+				*out = make([]string, len(*in))
+				copy(*out, *in)
+			}
+			(*out)[key] = outVal
+		}
+	}
+	if in.InstanceGroupRoleAdditionalPolicies != nil {
+		in, out := &in.InstanceGroupRoleAdditionalPolicies, &out.InstanceGroupRoleAdditionalPolicies
+		*out = make(map[InstanceGroupRole]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
 	}
 	if in.UseServiceAccountExternalPermissions != nil {
 		in, out := &in.UseServiceAccountExternalPermissions, &out.UseServiceAccountExternalPermissions

@@ -8,6 +8,8 @@ spec:
   additionalNetworkCIDRs:
   - 172.21.0.0/16
   additionalPolicies:
+    nodes: '[ { "Action": [ "s3:PutObject" ], "Resource": [ "*" ], "Effect": "Allow"
+      } ]'
     master: '[ { "Action": [ "s3:GetObject" ], "Resource": [ "*" ], "Effect": "Allow"
       } ]'
   additionalSans:
@@ -54,6 +56,8 @@ spec:
   externalDns:
     disable: true
   externalPolicies:
+    nodes:
+    - arn:aws-test:iam::123456789000:policy/test-policy-nodes
     master:
     - arn:aws-test:iam::123456789000:policy/test-policy
   hooks:

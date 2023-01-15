@@ -155,8 +155,10 @@ type ClusterSpec struct {
 	//   'external': do not apply updates automatically; they are applied manually or by an external system
 	UpdatePolicy *string `json:"updatePolicy,omitempty"`
 	// ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles
+	// +k8s:conversion-gen=false
 	ExternalPolicies map[string][]string `json:"externalPolicies,omitempty"`
 	// Additional policies to add for roles
+	// +k8s:conversion-gen=false
 	AdditionalPolicies map[string]string `json:"additionalPolicies,omitempty"`
 	// A collection of files assets for deployed cluster wide
 	FileAssets []FileAssetSpec `json:"fileAssets,omitempty"`
@@ -349,6 +351,10 @@ type IAMSpec struct {
 	Legacy                 bool    `json:"legacy"`
 	AllowContainerRegistry bool    `json:"allowContainerRegistry,omitempty"`
 	PermissionsBoundary    *string `json:"permissionsBoundary,omitempty"`
+	// ExternalPolicies allows the insertion of pre-existing managed policies on instance group Roles
+	InstanceGroupRoleExternalPolicies map[InstanceGroupRole][]string `json:"-"`
+	// Additional policies to add for roles.
+	InstanceGroupRoleAdditionalPolicies map[InstanceGroupRole]string `json:"-"`
 	// UseServiceAccountExternalPermissions determines if managed ServiceAccounts will use external permissions directly.
 	// If this is set to false, ServiceAccounts will assume external permissions from the instances they run on.
 	UseServiceAccountExternalPermissions *bool `json:"useServiceAccountExternalPermissions,omitempty"`

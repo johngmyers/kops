@@ -96,10 +96,6 @@ type ClusterSpec struct {
 	//   'automatic' (default): apply updates automatically (apply OS security upgrades, avoiding rebooting when possible)
 	//   'external': do not apply updates automatically; they are applied manually or by an external system
 	UpdatePolicy *string `json:"updatePolicy,omitempty"`
-	// ExternalPolicies allows the insertion of pre-existing managed policies on IG Roles
-	ExternalPolicies map[string][]string `json:"externalPolicies,omitempty"`
-	// Additional policies to add for roles
-	AdditionalPolicies map[string]string `json:"additionalPolicies,omitempty"`
 	// A collection of files assets for deployed cluster wide
 	FileAssets []FileAssetSpec `json:"fileAssets,omitempty"`
 	// EtcdClusters stores the configuration for each cluster
@@ -340,6 +336,10 @@ type IAMSpec struct {
 	Legacy                 bool    `json:"legacy"`
 	AllowContainerRegistry bool    `json:"allowContainerRegistry,omitempty"`
 	PermissionsBoundary    *string `json:"permissionsBoundary,omitempty"`
+	// ExternalPolicies allows the insertion of pre-existing managed policies on instance group Roles
+	InstanceGroupRoleExternalPolicies map[InstanceGroupRole][]string `json:"instanceGroupRoleExternalPolicies,omitempty"`
+	// Additional policies to add for roles.
+	InstanceGroupRoleAdditionalPolicies map[InstanceGroupRole]string `json:"instanceGroupRoleAdditionalPolicies,omitempty"`
 	// UseServiceAccountExternalPermissions determines if managed ServiceAccounts will use external permissions directly.
 	// If this is set to false, ServiceAccounts will assume external permissions from the instances they run on.
 	UseServiceAccountExternalPermissions *bool `json:"useServiceAccountExternalPermissions,omitempty"`
