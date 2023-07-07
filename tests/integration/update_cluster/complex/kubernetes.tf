@@ -1180,7 +1180,7 @@ resource "aws_subnet" "us-east-1a-utility-complex-example-com" {
 
 resource "aws_subnet" "us-test-1a-complex-example-com" {
   availability_zone                           = "us-test-1a"
-  cidr_block                                  = "172.20.32.0/19"
+  cidr_block                                  = "10.2.32.0/19"
   enable_resource_name_dns_a_record_on_launch = true
   private_dns_hostname_type_on_launch         = "resource-name"
   tags = {
